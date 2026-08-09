@@ -36,7 +36,7 @@ function ProjectBlock({ project }: { project: Project }) {
   const panels = projectMocks[project.id]?.() ?? [];
 
   // The whole block is clickable, but the visible CTA link is a real
-  // <a> of its own — so clicks landing on it just use native anchor
+  // <a> of its own, so clicks landing on it just use native anchor
   // behavior, and this handler steps aside rather than double-firing.
   function handleCardClick(e: MouseEvent<HTMLDivElement>) {
     if (!clickable) return;
@@ -53,9 +53,8 @@ function ProjectBlock({ project }: { project: Project }) {
       ref={blockRef}
       onClick={handleCardClick}
       data-cursor={clickable ? 'project' : undefined}
-      className={`project-block group border-t border-line py-22.5 transition-transform duration-500 ease-out ${
-        clickable ? 'cursor-pointer hover:-translate-y-1' : ''
-      }`}
+      className={`project-block group border-t border-line py-22.5 transition-transform duration-500 ease-out ${clickable ? 'cursor-pointer hover:-translate-y-1' : ''
+        }`}
     >
       <div className="mb-11 flex flex-wrap items-end justify-between gap-6">
         <div>
@@ -118,7 +117,7 @@ function ProjectBlock({ project }: { project: Project }) {
 
         {project.note && <div className="eyebrow mt-1.5">{project.note}</div>}
 
-        {/* Subtle reflection sweep on hover — restrained, not a shine gimmick */}
+        {/* Subtle reflection sweep on hover, restrained, not a shine gimmick */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
@@ -128,33 +127,38 @@ function ProjectBlock({ project }: { project: Project }) {
   );
 }
 
-function ClientCard({ client }: { client: Client }) {
-  const initials = client.name
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('');
+function LogoMarquee({ items }: { items: Client[] }) {
+  // Repeat the set 4 times for a longer, smoother marquee.
+  const track = [...items, ...items, ...items, ...items];
+  const duration = Math.max(14, items.length * 5);
 
   return (
-    <Glass className="flex w-[240px] flex-none flex-col gap-4 p-5">
-      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-line-strong">
-        {client.logo ? (
-          <img src={client.logo} alt={client.name} className="h-6 w-6 object-contain" />
-        ) : (
-          <span className="font-display text-[0.72rem] font-semibold text-ink-dim">{initials}</span>
-        )}
+    <div className="marquee-mask relative -mx-1 overflow-hidden px-1">
+      <div
+        className="marquee-track flex w-max items-center"
+        style={{ animationDuration: `${duration}s` }}
+      >
+        {track.map((c, i) => (
+          <div
+            key={`${c.name}-${i}`}
+            title={c.name}
+            className="glass mr-5 flex h-24 w-40 flex-none items-center justify-center rounded-2xl p-6 sm:h-28 sm:w-48"
+          >
+            {c.logo ? (
+              <img
+                src={c.logo}
+                alt={c.name}
+                className="max-h-14 max-w-full object-contain opacity-80 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:max-h-16"
+              />
+            ) : (
+              <span className="font-display text-[0.72rem] font-semibold text-ink-faint">
+                {c.name}
+              </span>
+            )}
+          </div>
+        ))}
       </div>
-      <div>
-        <div className="font-display text-[0.98rem] font-semibold">{client.name}</div>
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {client.tags.map((t) => (
-            <span key={t} className="rounded-full border border-line px-2.5 py-1 font-mono text-[0.6rem] text-ink-faint">
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    </Glass>
+    </div>
   );
 }
 
@@ -175,13 +179,10 @@ export default function ProjectShowcase() {
 
         <div className="project-block border-t border-line pb-5 pt-22.5">
           <h3 className="font-display mb-8 text-[clamp(1.9rem,4.6vw,3.4rem)] font-semibold">Built with</h3>
-          {/* Horizontally scrollable so new client logos can be added
-              later without the section ever needing to be re-laid-out. */}
-          <div className="flow-strip -mx-1 px-1">
-            {clients.map((c) => (
-              <ClientCard key={c.name} client={c} />
-            ))}
-          </div>
+          {/* Logo-only, continuously auto-scrolling, new client logos
+              can be appended to src/data/projects.ts and the marquee
+              just keeps looping, no layout changes needed. */}
+          <LogoMarquee items={clients} />
         </div>
       </div>
     </section>

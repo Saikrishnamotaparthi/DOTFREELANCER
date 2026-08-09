@@ -37,9 +37,19 @@ export default function About() {
         </div>
         <div className="about-grid grid grid-cols-1 items-start gap-15 md:grid-cols-[0.8fr_1.2fr]">
           <Glass variant="smoked" className="about-portrait relative flex aspect-[4/5] items-end overflow-hidden p-5.5">
+            {/* Fallback initials shown behind the photo */}
             <div className="font-display absolute inset-0 flex items-center justify-center text-[6rem] font-bold text-white/5">
               SM
             </div>
+            {/* Profile photo — place your image as /public/profile.jpg */}
+            <img
+              src="/profile.png"
+              alt="Sai Krishna Motaparthi"
+              className="absolute inset-0 h-full w-full object-cover object-top"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
+            />
             <div className="relative font-mono text-[0.66rem] tracking-wide text-ink-faint">
               SAI KRISHNA MOTAPARTHI · FOUNDER, DOTFREELANCER
             </div>

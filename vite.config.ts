@@ -1,5 +1,12 @@
 import { defineConfig, type Plugin, type Connect } from 'vite'
 import react from '@vitejs/plugin-react'
+import dotenv from 'dotenv'
+
+// Load .env into process.env so api/contact.ts can read GMAIL_USER,
+// GMAIL_APP_PASSWORD, and CONTACT_TO_EMAIL when running under the
+// Vite dev middleware (ssrLoadModule). Without this, Vite only
+// surfaces VITE_-prefixed vars; server-only vars stay undefined.
+dotenv.config()
 
 /**
  * Dev-only: Vite's dev server has no concept of the /api/*.ts
@@ -14,8 +21,11 @@ function contactApiDevMiddleware(): Plugin {
   return {
     name: 'contact-api-dev-middleware',
     configureServer(server) {
-      const handler: Connect.NextHandleFunction = async (req, res) => {
-        if (req.url !== '/api/contact') return;
+      const handler: Connect.NextHandleFunction = async (req, res, next) => {
+        if (req.url !== '/api/contact') {
+          next();
+          return;
+        }
 
         if (req.method !== 'POST') {
           res.statusCode = 405;

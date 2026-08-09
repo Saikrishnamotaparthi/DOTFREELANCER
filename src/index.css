@@ -56,6 +56,7 @@ body {
 .font-display {
   font-family: var(--font-display);
 }
+
 .font-mono {
   font-family: var(--font-mono);
 }
@@ -104,11 +105,13 @@ body {
   transform: translate(-50%, -50%);
   will-change: transform;
 }
+
 #cursor-dot {
   width: 6px;
   height: 6px;
   background: var(--color-ink);
 }
+
 #cursor-ring {
   width: 34px;
   height: 34px;
@@ -119,12 +122,14 @@ body {
     border-color 0.25s ease,
     background 0.25s ease;
 }
+
 body.cur-hover #cursor-ring {
   width: 64px;
   height: 64px;
   border-color: var(--color-brass);
   background: rgba(201, 168, 118, 0.06);
 }
+
 body.cur-project #cursor-ring {
   width: 96px;
   height: 96px;
@@ -132,7 +137,9 @@ body.cur-project #cursor-ring {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(6px);
 }
+
 @media (max-width: 860px) {
+
   #cursor-dot,
   #cursor-ring {
     display: none;
@@ -150,9 +157,11 @@ body.cur-project #cursor-ring {
     0 30px 60px -20px rgba(0, 0, 0, 0.6);
   border-radius: 14px;
 }
+
 .glass-smoked {
   background: linear-gradient(160deg, rgba(20, 22, 26, 0.7), rgba(10, 11, 13, 0.5));
 }
+
 .glass-clear {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.005));
   box-shadow:
@@ -175,6 +184,7 @@ body.cur-project #cursor-ring {
   padding: 6px 0 14px;
   scrollbar-width: none;
 }
+
 .flow-strip::-webkit-scrollbar {
   display: none;
 }
@@ -183,15 +193,44 @@ body.cur-project #cursor-ring {
   0% {
     top: -100%;
   }
+
   60% {
     top: 100%;
   }
+
   100% {
     top: 100%;
   }
 }
 
+/* ---------- logo marquee (Built with) ---------- */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation-name: marquee-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

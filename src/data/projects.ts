@@ -34,10 +34,9 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 'pro-nights',
-    title: 'Multi-Day Pro Nights Platform',
+    title: 'PRAMANA26 | GITAM',
     flagship: true,
-    // TODO: replace with the live project URL.
-    url: 'https://example.com/pro-nights',
+    url: 'https://pramana.gitam.edu/',
     category: 'Event platform',
     meta: [
       { label: 'Role', value: 'End-to-end build' },
@@ -62,7 +61,7 @@ export const projects: Project[] = [
     id: 'restaurant',
     title: 'Restaurant Platform',
     // TODO: replace with the live project URL.
-    url: 'https://example.com/restaurant-platform',
+    url: 'https://restaurant-gamma-kohl.vercel.app/',
     category: 'Website + admin system',
     meta: [
       { label: 'Role', value: 'Website + admin system' },
@@ -76,7 +75,7 @@ export const projects: Project[] = [
     id: 'school',
     title: 'School Website',
     // TODO: replace with the live project URL.
-    url: 'https://example.com/school-website',
+    url: 'https://education-beige-three.vercel.app/',
     category: 'Website + CMS',
     meta: [
       { label: 'Role', value: 'Website + CMS' },
@@ -87,8 +86,7 @@ export const projects: Project[] = [
   {
     id: 'event-management',
     title: 'Event Management Platform',
-    // TODO: replace with the live project URL.
-    url: 'https://example.com/event-management',
+    url: 'https://nexuslegacyevents.vercel.app/',
     category: 'Discovery to analytics',
     meta: [
       { label: 'Role', value: 'Discovery to analytics' },
@@ -96,6 +94,19 @@ export const projects: Project[] = [
     ],
     flow: ['Discovery', 'Registration', 'Payment', 'Ticket', 'Entry', 'Dashboard'],
     technologies: ['React', 'Node.js', 'Stripe'],
+  },
+  {
+    id: 'event-management',
+    title: 'Anvayaa Productions',
+    // TODO: replace with the live project URL.
+    url: 'https://www.anvayaaproductions.in/',
+    category: 'Event Production & Luxury Weddings',
+    meta: [
+      { label: 'Role', value: 'Website Development' },
+      { label: 'Stack', value: 'React · Responsive UI · Interactive Experience' },
+    ],
+    flow: ['Discovery', 'Services', 'Portfolio', 'Events', 'Contact'],
+    technologies: ['React', 'Node.js', 'Responsive Design'],
   },
 ];
 
@@ -107,6 +118,19 @@ export interface Client {
 }
 
 export const clients: Client[] = [
-  { name: 'Nexus Legacy Events', tags: ['Client', 'Event platform', 'Live analytics'] },
-  { name: 'Anvayaa Productions', tags: ['Client', 'Ticketing', 'QR entry system'] },
+  {
+    name: 'Pramana26',
+    tags: [],
+    logo: '/pramana.png',
+  },
+  {
+    name: 'Nexus Legacy Events',
+    tags: [],
+    logo: '/nexus-legacy-events.png',
+  },
+  {
+    name: 'Anvayaa Productions',
+    tags: [],
+    logo: '/anvayaa-productions.png',
+  },
 ];
