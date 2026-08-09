@@ -68,7 +68,7 @@ export default function Contact() {
 
   if (state === 'success') {
     return (
-      <section id="contact" className="relative py-45 text-center">
+      <section id="contact" className="relative overflow-hidden py-45 text-center">
         <Glow />
         <div className="wrap relative">
           <Glass
@@ -107,12 +107,14 @@ export default function Contact() {
             </div>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">
+
               <a
                 href="#hero"
                 className="inline-flex items-center gap-2.5 rounded-full border border-line-strong px-6.5 py-3.5 text-[0.88rem] text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-brass"
               >
                 Back to DotFreelancer
               </a>
+
               <a
                 href={siteConfig.contact.whatsapp}
                 target="_blank"
@@ -122,13 +124,13 @@ export default function Contact() {
               >
                 Chat on WhatsApp →
               </a>
-            </div>
+        </div>
 
         <div className="mt-9 font-mono text-[0.64rem] tracking-wide text-ink-faint">Reference {refId}</div>
-      </Glass>
-        </div >
+          </Glass>
+        </div>
 
-      <style>{`
+        <style>{`
           @keyframes success-in {
             from { opacity: 0; transform: translateY(18px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -138,12 +140,12 @@ export default function Contact() {
             .success-in { animation: none; }
           }
         `}</style>
-      </section >
+      </section>
     );
   }
 
   return (
-    <section id="contact" className="relative py-45">
+    <section id="contact" className="relative overflow-hidden py-45">
       <Glow />
       <div className="wrap relative">
         <div className="text-center">
@@ -280,6 +282,7 @@ export default function Contact() {
         <div className="mx-auto mt-10 max-w-[760px] text-center">
           <p className="text-[0.86rem] text-ink-faint">
             Prefer a quick conversation?{' '}
+
             <a
               href={siteConfig.contact.whatsapp}
               target="_blank"

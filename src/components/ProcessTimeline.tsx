@@ -2,34 +2,79 @@ import { useRef } from 'react';
 import { processSteps } from '../data/process';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { ScrollTrigger } from '../lib/gsap';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 export default function ProcessTimeline() {
   const sectionRef = useRef<HTMLElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // Pinned + scrubbed sections are the classic source of scroll jank
+  // on phones (the address bar showing/hiding mid-scroll fights with
+  // the pin's cached measurements). Desktop keeps the full mechanism;
+  // mobile gets a plain sequential reveal, no pin, no scrub.
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Driven as one continuous scrub rather than per-step triggers, so
   // the fill and the active step always agree with each other — it
-  // reads as one mechanism, not independent animations.
-  useScrollAnimation(sectionRef, () => {
-    const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 0.5,
-      onUpdate(self) {
-        const p = self.progress;
-        if (fillRef.current) fillRef.current.style.height = `${p * 100}%`;
-        const idx = Math.min(steps.length - 1, Math.floor(p * steps.length));
-        steps.forEach((s, i) => s.classList.toggle('process-active', i <= idx));
-      },
-    });
-  });
+  // reads as one mechanism, not independent animations. Desktop only.
+  useScrollAnimation(
+    sectionRef,
+    () => {
+      if (!isDesktop) return;
+      const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.5,
+        onUpdate(self) {
+          const p = self.progress;
+          if (fillRef.current) fillRef.current.style.height = `${p * 100}%`;
+          const idx = Math.min(steps.length - 1, Math.floor(p * steps.length));
+          steps.forEach((s, i) => s.classList.toggle('process-active', i <= idx));
+        },
+      });
+    },
+    [isDesktop],
+  );
+
+  // Mobile: each step just fades/slides in as it enters view, and
+  // stays active — no pin, no pixel-perfect fill sync required.
+  useScrollAnimation(
+    sectionRef,
+    ({ gsap }) => {
+      if (isDesktop) return;
+      const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
+      steps.forEach((step, i) => {
+        gsap.to(step, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: step, start: 'top 82%' },
+          onStart: () => {
+            step.classList.add('process-active');
+            if (fillRef.current) fillRef.current.style.height = `${((i + 1) / steps.length) * 100}%`;
+          },
+        });
+      });
+    },
+    [isDesktop],
+  );
 
   return (
-    <section ref={sectionRef} id="process" className="relative h-[340vh]">
-      <div className="wrap sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="process"
+      className={isDesktop ? 'relative h-[340vh]' : 'relative py-24'}
+    >
+      <div
+        className={
+          isDesktop
+            ? 'wrap sticky top-0 flex h-screen flex-col justify-center overflow-hidden'
+            : 'wrap flex flex-col justify-center'
+        }
+      >
         <div className="pb-10">
           <div className="eyebrow mb-4.5">How it gets built</div>
           <h2 className="font-display text-[clamp(1.8rem,4vw,2.8rem)] font-semibold">

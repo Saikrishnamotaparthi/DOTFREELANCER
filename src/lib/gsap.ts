@@ -3,6 +3,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Mobile browsers resize the viewport when the address bar shows/hides
+// on scroll, which by default re-triggers a full ScrollTrigger
+// recalculation mid-scroll — the classic cause of pinned sections
+// jumping or lagging on phones. This tells ScrollTrigger to ignore
+// those address-bar-driven resizes specifically.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 // Central motion tokens so every section shares the same easing
 // language instead of hand-picked curves per component.
 export const motion = {

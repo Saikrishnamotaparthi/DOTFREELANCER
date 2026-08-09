@@ -4,7 +4,7 @@ import { useMouseParallax } from '../hooks/useMouseParallax';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-interface Panel {
+export interface Panel {
   label: string;
   variant: 'default' | 'smoked' | 'clear';
   depth: number;
@@ -12,7 +12,7 @@ interface Panel {
   style: React.CSSProperties;
 }
 
-const panels: Panel[] = [
+export const heroPanels: Panel[] = [
   {
     label: 'Dashboard',
     variant: 'default',
@@ -50,15 +50,24 @@ const panels: Panel[] = [
   },
 ];
 
+/**
+ * Desktop-only: the original absolutely-positioned, parallax-reactive
+ * background panels. Rendering is gated behind the same breakpoint
+ * the parallax hook uses, so mobile gets nothing from this component —
+ * see HeroPanelStrip for the mobile equivalent, which reuses the same
+ * `heroPanels` data but lays it out inline instead of floating.
+ */
 export default function FloatingPanels() {
   const stageRef = useRef<HTMLDivElement>(null);
   const isDesktop = useMediaQuery('(min-width: 861px)');
   const reduced = useReducedMotion();
   useMouseParallax(stageRef, isDesktop && !reduced);
 
+  if (!isDesktop) return null;
+
   return (
     <div ref={stageRef} className="absolute inset-0 pointer-events-none" id="hero-stage">
-      {panels.map((p) => (
+      {heroPanels.map((p) => (
         <Glass
           key={p.label}
           variant={p.variant}
@@ -74,9 +83,8 @@ export default function FloatingPanels() {
             {p.bars.map((b, i) => (
               <span
                 key={i}
-                className={`block h-1.5 rounded-full ${
-                  b.accent ? 'bg-brass/35' : 'bg-white/8'
-                }`}
+                className={`block h-1.5 rounded-full ${b.accent ? 'bg-brass/35' : 'bg-white/8'
+                  }`}
                 style={{ width: b.width }}
               />
             ))}

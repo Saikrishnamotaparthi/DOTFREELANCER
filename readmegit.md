@@ -1,3 +1,3 @@
 git add .
-git commit -m "UPDATE VITE v2"
+git commit -m "UPDATE UI AND ETC"
 git push

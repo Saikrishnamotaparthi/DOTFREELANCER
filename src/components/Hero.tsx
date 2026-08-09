@@ -70,7 +70,7 @@ export default function Hero({ introReady }: HeroProps) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex h-screen min-h-[720px] flex-col justify-center overflow-hidden"
+      className="relative flex h-screen md:min-h-[720px] flex-col justify-center overflow-hidden"
     >
       <div
         className="pointer-events-none absolute -top-[10%] left-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full blur-[20px]"
