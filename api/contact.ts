@@ -23,8 +23,8 @@
 // See .env.example and the README for step-by-step setup.
 
 import nodemailer from 'nodemailer';
-import { validateContact } from '../src/lib/contact-types';
-import type { ContactPayload } from '../src/lib/contact-types';
+import { validateContact } from '../src/lib/contact-types.js';
+import type { ContactPayload } from '../src/lib/contact-types.js';
 
 interface VercelRequest {
   method?: string;
@@ -79,14 +79,14 @@ function ownerEmailHtml(payload: ContactPayload): string {
       <p style="color:#a7a8ad;font-size:13px;margin:0 0 24px;">via dotfreelancer.dev</p>
       <table style="width:100%;border-collapse:collapse;">
         ${rows
-          .map(
-            ([label, value]) => `
+      .map(
+        ([label, value]) => `
           <tr>
             <td style="padding:8px 0;color:#5c5f66;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;width:160px;vertical-align:top;">${escapeHtml(label)}</td>
             <td style="padding:8px 0;font-size:14px;">${escapeHtml(value)}</td>
           </tr>`,
-          )
-          .join('')}
+      )
+      .join('')}
       </table>
       <div style="margin-top:24px;padding-top:24px;border-top:1px solid #232323;">
         <div style="color:#5c5f66;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Project details</div>
