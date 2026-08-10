@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import FloatingPanels from './FloatingPanels';
+import HeroPanelStrip from './HeroPanelStrip';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -70,7 +71,7 @@ export default function Hero({ introReady }: HeroProps) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex h-screen md:min-h-[720px] flex-col justify-center overflow-hidden"
+      className="relative flex min-h-screen md:h-screen md:min-h-[720px] flex-col justify-center overflow-hidden"
     >
       <div
         className="pointer-events-none absolute -top-[10%] left-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full blur-[20px]"
@@ -108,7 +109,9 @@ export default function Hero({ introReady }: HeroProps) {
             See the work
           </a>
         </div>
-      </div>
+
+        <HeroPanelStrip />
+      </div >
 
       <div className="absolute bottom-9 left-6 md:left-18 flex items-center gap-2.5 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-ink-faint">
         <span className="relative h-11 w-px overflow-hidden bg-gradient-to-b from-ink-faint to-transparent">
@@ -116,6 +119,6 @@ export default function Hero({ introReady }: HeroProps) {
         </span>
         Scroll
       </div>
-    </section>
+    </section >
   );
 }
