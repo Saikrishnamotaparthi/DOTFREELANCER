@@ -1,3 +1,3 @@
 git add .
-git commit -m "UPDATE UI mob v2AND ETC"
+git commit -m "UPDATE entry qr"
 git push

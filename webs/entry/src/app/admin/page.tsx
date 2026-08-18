@@ -261,7 +261,17 @@ export default function AdminLandingPage() {
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Key className="h-3.5 w-3.5 text-text-muted" />
-                        GATE ACCESS: <span className="text-brand-accent font-semibold tracking-wider">{e.accessCode}</span>
+                        GATE ACCESS:{" "}
+                        <span 
+                          onClick={() => {
+                            navigator.clipboard.writeText(e.accessCode);
+                            alert(`Passcode "${e.accessCode}" copied to clipboard!`);
+                          }}
+                          className="text-brand-accent font-semibold tracking-wider hover:text-brand-primary cursor-pointer transition-colors"
+                          title="Click to copy passcode"
+                        >
+                          {e.accessCode}
+                        </span>
                       </div>
                     </div>
                   </div>

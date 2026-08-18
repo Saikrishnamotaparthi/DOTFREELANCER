@@ -404,7 +404,17 @@ export default function GateEntryPage() {
                 {event.name}
               </h1>
               <p className="text-xs text-text-secondary mt-1 font-mono">
-                PASSKEY: <span className="text-brand-accent font-bold tracking-wider">{event.accessCode}</span>
+                PASSKEY:{" "}
+                <span 
+                  onClick={() => {
+                    navigator.clipboard.writeText(event.accessCode);
+                    alert(`Passcode "${event.accessCode}" copied to clipboard!`);
+                  }}
+                  className="text-brand-accent font-bold tracking-wider hover:text-brand-primary cursor-pointer transition-colors"
+                  title="Click to copy passcode"
+                >
+                  {event.accessCode}
+                </span>
               </p>
             </div>
             
@@ -437,213 +447,250 @@ export default function GateEntryPage() {
           </Card>
 
           {/* Core Interactive Scanner Console */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            
-            {/* Left Box: Cyber Scanning HUD screen */}
-            <div className="lg:col-span-7 flex flex-col">
-              <Card className="flex-1 flex flex-col items-center justify-center min-h-[420px] relative overflow-hidden bg-navy-950/60 border-white/5 glow-shadow">
-                
-                {/* 4 Corner targets for camera overlay design */}
-                {isScanning && (
-                  <>
-                    <div className="absolute top-6 left-6 w-10 h-10 border-l-4 border-t-4 border-brand-accent rounded-tl-lg z-20 pointer-events-none" />
-                    <div className="absolute top-6 right-6 w-10 h-10 border-r-4 border-t-4 border-brand-accent rounded-tr-lg z-20 pointer-events-none" />
-                    <div className="absolute bottom-6 left-6 w-10 h-10 border-l-4 border-b-4 border-brand-accent rounded-bl-lg z-20 pointer-events-none" />
-                    <div className="absolute bottom-6 right-6 w-10 h-10 border-r-4 border-b-4 border-brand-accent rounded-br-lg z-20 pointer-events-none" />
-                    
-                    {/* Laser line effect */}
-                    <div className="absolute left-6 right-6 h-1 bg-brand-accent/70 shadow-[0_0_15px_#00F0FF] animate-scan-line z-20 pointer-events-none" />
-                    
-                    {/* Floating HUD text */}
-                    <div className="absolute bottom-10 left-0 right-0 text-center z-20 pointer-events-none animate-pulse">
-                      <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-brand-accent bg-navy-950/80 px-4 py-1.5 rounded-full border border-brand-accent/30">
-                        ALIGN TICKET QR IN FRAME
-                      </span>
-                    </div>
-                  </>
-                )}
+          {event.checkedInCount >= event.participantsCount && event.participantsCount > 0 ? (
+            <Card className="flex flex-col items-center justify-center min-h-[420px] relative overflow-hidden bg-navy-950/60 border-emerald-500/10 glow-shadow-success py-12 px-6 text-center animate-fade-in" heavy>
+              <div className="absolute top-0 left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+              
+              <div className="h-20 w-20 bg-emerald-500/10 border border-emerald-500/25 rounded-full flex items-center justify-center text-emerald-400 mb-6 animate-pulse">
+                <ShieldCheck className="h-12 w-12" />
+              </div>
+              
+              <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-[0.25em] font-black bg-emerald-950/80 border border-emerald-500/20 px-4 py-1.5 rounded-full mb-3">
+                CHECK-IN COMPLETE
+              </span>
+              
+              <h2 className="text-3xl md:text-4xl font-mono font-black text-white tracking-tight max-w-lg mb-3">
+                EVERYONE HAS CHECKED IN!
+              </h2>
+              
+              <p className="text-xs md:text-sm text-text-secondary max-w-md mx-auto leading-relaxed mb-8">
+                All <strong className="text-white font-mono">{event.participantsCount}</strong> registered participants have successfully passed validation. The scanner has been paused.
+              </p>
+              
+              <div className="p-4 bg-navy-900/50 border border-white/5 rounded-2xl max-w-sm w-full flex items-center justify-around gap-6">
+                <div>
+                  <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest block">Scanned</span>
+                  <span className="text-2xl font-mono font-bold text-white mt-1 block">{event.checkedInCount}</span>
+                </div>
+                <div className="h-8 w-px bg-white/10" />
+                <div>
+                  <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest block">Total Guests</span>
+                  <span className="text-2xl font-mono font-bold text-white mt-1 block">{event.participantsCount}</span>
+                </div>
+                <div className="h-8 w-px bg-white/10" />
+                <div>
+                  <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest block">Completion</span>
+                  <span className="text-2xl font-mono font-bold text-emerald-400 mt-1 block">100%</span>
+                </div>
+              </div>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+              
+              {/* Left Box: Cyber Scanning HUD screen */}
+              <div className="lg:col-span-7 flex flex-col">
+                <Card className="flex-1 flex flex-col items-center justify-center min-h-[420px] relative overflow-hidden bg-navy-950/60 border-white/5 glow-shadow" heavy>
+                  
+                  {/* 4 Corner targets for camera overlay design */}
+                  {isScanning && (
+                    <>
+                      <div className="absolute top-6 left-6 w-10 h-10 border-l-4 border-t-4 border-brand-accent rounded-tl-lg z-20 pointer-events-none" />
+                      <div className="absolute top-6 right-6 w-10 h-10 border-r-4 border-t-4 border-brand-accent rounded-tr-lg z-20 pointer-events-none" />
+                      <div className="absolute bottom-6 left-6 w-10 h-10 border-l-4 border-b-4 border-brand-accent rounded-bl-lg z-20 pointer-events-none" />
+                      <div className="absolute bottom-6 right-6 w-10 h-10 border-r-4 border-b-4 border-brand-accent rounded-br-lg z-20 pointer-events-none" />
+                      
+                      {/* Laser line effect */}
+                      <div className="absolute left-6 right-6 h-1 bg-brand-accent/70 shadow-[0_0_15px_#00F0FF] animate-scan-line z-20 pointer-events-none" />
+                      
+                      {/* Floating HUD text */}
+                      <div className="absolute bottom-10 left-0 right-0 text-center z-20 pointer-events-none animate-pulse">
+                        <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-brand-accent bg-navy-950/80 px-4 py-1.5 rounded-full border border-brand-accent/30">
+                          ALIGN TICKET QR IN FRAME
+                        </span>
+                      </div>
+                    </>
+                  )}
 
-                {/* State A: Idle screen */}
-                {!isScanning && scanResult.status === "idle" && (
-                  <div className="flex flex-col items-center text-center p-8 gap-5 z-10">
-                    <div className="h-20 w-20 bg-brand-primary/10 border border-brand-primary/25 rounded-2xl flex items-center justify-center text-brand-primary glow-glow transition-all duration-300 hover:scale-105">
-                      <Camera className="h-10 w-10" />
-                    </div>
-                    <div>
-                      <h3 className="font-mono text-white text-lg font-bold tracking-wider uppercase">QR SCANNER OFFLINE</h3>
-                      <p className="text-xs text-text-secondary max-w-[240px] mx-auto mt-2 leading-relaxed">
-                        Camera lens is offline. Click button below to mount decoder.
-                      </p>
-                    </div>
-                    <Button onClick={startScanner} className="font-mono text-xs tracking-widest px-6 py-3 uppercase">
-                      INITIALIZE SCANNER
-                    </Button>
-                  </div>
-                )}
-
-                {/* State B: Scanner running */}
-                {isScanning && (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10 gap-5">
-                    <div 
-                      id={scannerId} 
-                      className="w-full max-w-[340px] aspect-square rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner"
-                    />
-                    <Button variant="danger" size="sm" onClick={stopScanner} className="font-mono text-xs uppercase tracking-widest px-5 py-2.5">
-                      DISABLE CAMERA
-                    </Button>
-                  </div>
-                )}
-
-                {/* State C: Validation success card */}
-                {scanResult.status === "success" && scanResult.participant && (
-                  <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-success animate-fade-in border border-emerald-500/20">
-                    <div className="h-16 w-16 bg-emerald-500/10 border border-emerald-500/35 rounded-full flex items-center justify-center text-emerald-400 mb-4 animate-bounce">
-                      <CheckCircle className="h-9 w-9" />
-                    </div>
-                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-[0.25em] font-black bg-emerald-950 border border-emerald-500/30 px-3 py-1 rounded-md mb-2">
-                      PASS VERIFIED
-                    </span>
-                    <h2 className="text-2xl md:text-3xl font-mono font-black text-white tracking-tight mb-1">
-                      {scanResult.participant.name}
-                    </h2>
-                    <p className="text-xs text-text-secondary font-mono tracking-widest uppercase mb-8">
-                      TICKET ID: <span className="text-brand-accent">{scanResult.participant.row_id}</span>
-                    </p>
-
-                    <div className="flex gap-4 w-full max-w-xs justify-center">
-                      <Button variant="secondary" size="sm" onClick={startScanner} className="w-28 font-mono text-xs uppercase">
-                        Skip
+                  {/* State A: Idle screen */}
+                  {!isScanning && scanResult.status === "idle" && (
+                    <div className="flex flex-col items-center text-center p-8 gap-5 z-10">
+                      <div className="h-20 w-20 bg-brand-primary/10 border border-brand-primary/25 rounded-2xl flex items-center justify-center text-brand-primary glow-glow transition-all duration-300 hover:scale-105">
+                        <Camera className="h-10 w-10" />
+                      </div>
+                      <div>
+                        <h3 className="font-mono text-white text-lg font-bold tracking-wider uppercase">QR SCANNER OFFLINE</h3>
+                        <p className="text-xs text-text-secondary max-w-[240px] mx-auto mt-2 leading-relaxed">
+                          Camera lens is offline. Click button below to mount decoder.
+                        </p>
+                      </div>
+                      <Button onClick={startScanner} className="font-mono text-xs tracking-widest px-6 py-3 uppercase">
+                        INITIALIZE SCANNER
                       </Button>
-                      <Button 
-                        variant="success" 
-                        size="sm" 
-                        isLoading={manualCheckInLoading}
-                        onClick={() => confirmCheckIn(scanResult.participant!)}
-                        className="w-36 font-mono text-xs uppercase glow-shadow"
-                      >
-                        Approve entry
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                {/* State D: Duplicate entry warning */}
-                {scanResult.status === "duplicate" && scanResult.participant && (
-                  <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-accent animate-fade-in border border-yellow-500/20">
-                    <div className="h-16 w-16 bg-yellow-500/10 border border-yellow-500/35 rounded-full flex items-center justify-center text-yellow-400 mb-4">
-                      <AlertTriangle className="h-9 w-9 animate-pulse" />
-                    </div>
-                    <span className="text-[10px] font-mono text-yellow-400 uppercase tracking-[0.2em] font-black bg-yellow-950 border border-yellow-500/30 px-3 py-1 rounded-md mb-2">
-                      ALREADY CHECKED-IN
-                    </span>
-                    <h2 className="text-xl font-mono font-bold text-white tracking-tight mb-1">
-                      {scanResult.participant.name}
-                    </h2>
-                    <p className="text-xs text-text-secondary font-mono mb-4">
-                      ID: <span className="text-brand-accent">{scanResult.participant.row_id}</span>
-                    </p>
-                    <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-yellow-400 text-xs font-mono mb-8 max-w-xs leading-relaxed">
-                      {scanResult.message}
-                    </div>
-
-                    <Button variant="secondary" size="sm" onClick={startScanner} className="w-40 font-mono text-xs uppercase">
-                      RESET VALIDATOR
-                    </Button>
-                  </div>
-                )}
-
-                {/* State E: Invalid/Not found ticket */}
-                {scanResult.status === "not_found" && (
-                  <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-danger animate-fade-in border border-red-500/20">
-                    <div className="h-16 w-16 bg-red-500/10 border border-red-500/35 rounded-full flex items-center justify-center text-red-500 mb-4">
-                      <XCircle className="h-9 w-9" />
-                    </div>
-                    <span className="text-[10px] font-mono text-red-500 uppercase tracking-[0.2em] font-black bg-red-950 border border-red-500/30 px-3 py-1 rounded-md mb-2">
-                      INVALID CREDENTIALS
-                    </span>
-                    <h2 className="text-lg font-mono font-bold text-white tracking-tight mb-3">
-                      TICKET REJECTED
-                    </h2>
-                    <p className="text-xs text-red-400 max-w-xs mb-8 leading-relaxed font-mono font-bold uppercase tracking-wider">
-                      {scanResult.message}
-                    </p>
-
-                    <Button variant="secondary" size="sm" onClick={startScanner} className="w-40 font-mono text-xs uppercase">
-                      RESET SCANNER
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            </div>
-
-            {/* Right Box: Sleek database search console */}
-            <div className="lg:col-span-5 flex flex-col">
-              <Card className="flex-1 flex flex-col min-h-[420px] bg-navy-950/60 border-white/5">
-                <h3 className="font-mono text-white text-sm font-bold uppercase tracking-widest flex items-center gap-2 mb-5">
-                  <Search className="h-4.5 w-4.5 text-brand-accent" />
-                  DATABASE CONSOLE
-                </h3>
-
-                <form onSubmit={handleSearch} className="flex gap-2 mb-4">
-                  <div className="relative flex-1">
-                    <input
-                      type="text"
-                      id="scanner-search-field"
-                      placeholder="Input Ticket ID or Name"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-navy-950/80 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder:text-text-muted focus:ring-1 focus:ring-brand-accent focus:outline-none"
-                    />
-                  </div>
-                  <Button type="submit" size="sm" className="px-4 text-xs font-mono uppercase" isLoading={searchLoading}>
-                    QUERY
-                  </Button>
-                </form>
-
-                {/* Results list terminal output layout */}
-                <div className="flex-1 overflow-y-auto max-h-[260px] flex flex-col gap-2.5 pr-1.5">
-                  {searchResults.length === 0 && !searchLoading && (
-                    <div className="flex-1 flex flex-col items-center justify-center text-center py-10 opacity-40">
-                      <HelpCircle className="h-10 w-10 text-text-muted mb-2" />
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-text-secondary">
-                        Enter query term to retrieve guest credentials
-                      </p>
                     </div>
                   )}
 
-                  {searchResults.map((p) => (
-                    <div 
-                      key={p.id}
-                      className="p-3.5 bg-navy-900/40 border border-white/5 rounded-xl flex items-center justify-between text-xs hover:border-brand-primary/30 transition-all duration-200"
-                    >
-                      <div className="truncate max-w-[170px]">
-                        <p className="font-bold text-white truncate">{p.name}</p>
-                        <p className="text-[10px] font-mono text-text-secondary mt-1 tracking-wider">
-                          TICKET: <span className="text-brand-accent font-bold">{p.row_id}</span>
-                        </p>
+                  {/* State B: Scanner running */}
+                  {isScanning && (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10 gap-5">
+                      <div 
+                        id={scannerId} 
+                        className="w-full max-w-[340px] aspect-square rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner"
+                      />
+                      <Button variant="danger" size="sm" onClick={stopScanner} className="font-mono text-xs uppercase tracking-widest px-5 py-2.5">
+                        DISABLE CAMERA
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* State C: Validation success card */}
+                  {scanResult.status === "success" && scanResult.participant && (
+                    <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-success animate-fade-in border border-emerald-500/20">
+                      <div className="h-16 w-16 bg-emerald-500/10 border border-emerald-500/35 rounded-full flex items-center justify-center text-emerald-400 mb-4 animate-bounce">
+                        <CheckCircle className="h-9 w-9" />
+                      </div>
+                      <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-[0.25em] font-black bg-emerald-950 border border-emerald-500/30 px-3 py-1 rounded-md mb-2">
+                        PASS VERIFIED
+                      </span>
+                      <h2 className="text-2xl md:text-3xl font-mono font-black text-white tracking-tight mb-1">
+                        {scanResult.participant.name}
+                      </h2>
+                      <p className="text-xs text-text-secondary font-mono tracking-widest uppercase mb-8">
+                        TICKET ID: <span className="text-brand-accent">{scanResult.participant.row_id}</span>
+                      </p>
+
+                      <div className="flex gap-4 w-full max-w-xs justify-center">
+                        <Button variant="secondary" size="sm" onClick={startScanner} className="w-28 font-mono text-xs uppercase">
+                          Skip
+                        </Button>
+                        <Button 
+                          variant="success" 
+                          size="sm" 
+                          isLoading={manualCheckInLoading}
+                          onClick={() => confirmCheckIn(scanResult.participant!)}
+                          className="w-28 font-mono text-xs uppercase glow-shadow"
+                        >
+                          Check In
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* State D: Duplicate check-in warnings */}
+                  {scanResult.status === "duplicate" && scanResult.participant && (
+                    <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-warning animate-fade-in border border-yellow-500/20">
+                      <div className="h-16 w-16 bg-yellow-500/10 border border-yellow-500/35 rounded-full flex items-center justify-center text-yellow-500 mb-4">
+                        <AlertTriangle className="h-9 w-9 text-yellow-500" />
+                      </div>
+                      <span className="text-[10px] font-mono text-yellow-500 uppercase tracking-[0.2em] font-black bg-yellow-950 border border-yellow-500/30 px-3 py-1 rounded-md mb-2">
+                        DUPLICATE CODE
+                      </span>
+                      <h2 className="text-xl md:text-2xl font-mono font-bold text-white tracking-tight mb-1">
+                        {scanResult.participant.name}
+                      </h2>
+                      <p className="text-xs text-text-secondary font-mono mb-4">
+                        ID: <span className="text-brand-accent">{scanResult.participant.row_id}</span>
+                      </p>
+                      <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-yellow-400 text-xs font-mono mb-8 max-w-xs leading-relaxed">
+                        {scanResult.message}
                       </div>
 
-                      {p.checkedIn ? (
-                        <span className="text-[9px] font-mono font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 px-2.5 py-1 rounded-md uppercase">
-                          Checked-In
-                        </span>
-                      ) : (
-                        <Button 
-                          size="sm" 
-                          variant="success" 
-                          className="text-[10px] py-1.5 px-3 font-mono font-bold uppercase tracking-wider glow-shadow"
-                          onClick={() => confirmCheckIn(p)}
-                        >
-                          Verify
-                        </Button>
-                      )}
+                      <Button variant="secondary" size="sm" onClick={startScanner} className="w-40 font-mono text-xs uppercase">
+                        RESET VALIDATOR
+                      </Button>
                     </div>
-                  ))}
-                </div>
-              </Card>
+                  )}
+
+                  {/* State E: Invalid/Not found ticket */}
+                  {scanResult.status === "not_found" && (
+                    <div className="absolute inset-0 bg-navy-950/95 flex flex-col items-center justify-center p-8 text-center z-30 glow-shadow-danger animate-fade-in border border-red-500/20">
+                      <div className="h-16 w-16 bg-red-500/10 border border-red-500/35 rounded-full flex items-center justify-center text-red-500 mb-4">
+                        <XCircle className="h-9 w-9" />
+                      </div>
+                      <span className="text-[10px] font-mono text-red-500 uppercase tracking-[0.2em] font-black bg-red-950 border border-red-500/30 px-3 py-1 rounded-md mb-2">
+                        INVALID CREDENTIALS
+                      </span>
+                      <h2 className="text-lg font-mono font-bold text-white tracking-tight mb-3">
+                        TICKET REJECTED
+                      </h2>
+                      <p className="text-xs text-red-400 max-w-xs mb-8 leading-relaxed font-mono font-bold uppercase tracking-wider">
+                        {scanResult.message}
+                      </p>
+
+                      <Button variant="secondary" size="sm" onClick={startScanner} className="w-40 font-mono text-xs uppercase">
+                        RESET SCANNER
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              </div>
+
+              {/* Right Box: Sleek database search console */}
+              <div className="lg:col-span-5 flex flex-col">
+                <Card className="flex-1 flex flex-col min-h-[420px] bg-navy-950/60 border-white/5" heavy>
+                  <h3 className="font-mono text-white text-sm font-bold uppercase tracking-widest flex items-center gap-2 mb-5">
+                    <Search className="h-4.5 w-4.5 text-brand-accent" />
+                    DATABASE CONSOLE
+                  </h3>
+
+                  <form onSubmit={handleSearch} className="flex gap-2 mb-4">
+                    <div className="relative flex-1">
+                      <input
+                        type="text"
+                        id="scanner-search-field"
+                        placeholder="Input Ticket ID or Name"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-navy-950/80 border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white placeholder:text-text-muted focus:ring-1 focus:ring-brand-accent focus:outline-none"
+                      />
+                    </div>
+                    <Button type="submit" size="sm" className="px-4 text-xs font-mono uppercase" isLoading={searchLoading}>
+                      QUERY
+                    </Button>
+                  </form>
+
+                  {/* List of search results or initial placeholder */}
+                  <div className="flex-1 overflow-y-auto max-h-[290px] flex flex-col gap-3 pr-1">
+                    {searchResults.length === 0 ? (
+                      <div className="flex-1 flex flex-col items-center justify-center text-text-muted text-center py-10 gap-2">
+                        <Terminal className="h-6 w-6 opacity-30 text-brand-primary" />
+                        <p className="text-[10px] font-mono uppercase tracking-wider">Awaiting manual query inputs</p>
+                      </div>
+                    ) : (
+                      searchResults.map((p) => (
+                        <div 
+                          key={p.id}
+                          className="p-3.5 bg-navy-900/40 border border-white/5 rounded-xl flex items-center justify-between text-xs hover:border-brand-primary/30 transition-all duration-200"
+                        >
+                          <div className="truncate max-w-[170px]">
+                            <p className="font-bold text-white truncate">{p.name}</p>
+                            <p className="text-[10px] font-mono text-text-secondary mt-1 tracking-wider">
+                              TICKET: <span className="text-brand-accent font-bold">{p.row_id}</span>
+                            </p>
+                          </div>
+
+                          {p.checkedIn ? (
+                            <span className="text-[9px] font-mono font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 px-2.5 py-1 rounded-md uppercase">
+                              Checked-In
+                            </span>
+                          ) : (
+                            <Button 
+                              size="sm" 
+                              variant="success" 
+                              className="text-[10px] py-1.5 px-3 font-mono font-bold uppercase tracking-wider glow-shadow"
+                              onClick={() => confirmCheckIn(p)}
+                            >
+                              Verify
+                            </Button>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </Card>
+              </div>
+              
             </div>
-            
-          </div>
+          )}
           
           {/* Footer for scanner dashboard */}
           <div className="text-center text-[10px] font-mono uppercase tracking-[0.12em] text-text-muted mt-6">

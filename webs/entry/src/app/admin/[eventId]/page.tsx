@@ -463,7 +463,19 @@ export default function EventDetailPage() {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-xs text-text-secondary mt-3 font-mono">
           <span>SCHEDULED: <strong className="text-white">{event.date}</strong></span>
           <span className="hidden md:inline text-text-muted">&bull;</span>
-          <span>ACCESS PASSKEY: <strong className="text-brand-accent tracking-wider font-bold">{event.accessCode}</strong></span>
+          <span>
+            ACCESS PASSKEY:{" "}
+            <strong 
+              onClick={() => {
+                navigator.clipboard.writeText(event.accessCode);
+                alert(`Passcode "${event.accessCode}" copied to clipboard!`);
+              }}
+              className="text-brand-accent tracking-wider font-bold hover:text-brand-primary cursor-pointer transition-colors"
+              title="Click to copy passcode"
+            >
+              {event.accessCode}
+            </strong>
+          </span>
         </div>
       </Card>
 
