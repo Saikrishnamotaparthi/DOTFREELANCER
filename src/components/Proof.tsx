@@ -1,6 +1,6 @@
 const items = [
   { value: '12+', label: 'Systems Shipped', tag: '100% SUCCESS RATE' },
-  { value: '₹1.2Cr+', label: 'Transaction Mesh Processed', tag: 'FINTECH SECURED' },
+  { value: '100k+', label: 'Active Users & Requests Handled', tag: 'HIGH TRAFFIC SCALED' },
   { value: '99.98%', label: 'Platform Availability', tag: 'ZERO DOWNTIME' },
   { value: '1', label: 'Point of Accountability', tag: 'ZERO FRAGMENTATION' },
 ];

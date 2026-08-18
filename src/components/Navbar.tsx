@@ -52,13 +52,14 @@ export default function Navbar() {
         <a
           href="#hero"
           data-cursor="hover"
-          className="group flex items-center gap-3 font-display font-semibold text-[0.98rem] sm:text-[1.08rem] tracking-tight"
+          className="group flex items-center gap-2.5 font-display font-semibold text-[0.98rem] sm:text-[1.08rem] tracking-tight"
         >
-          <span className="relative flex h-2.5 w-2.5 items-center justify-center">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan shadow-[0_0_8px_#00f2fe]" />
-          </span>
-          <span className="flex items-center text-ink group-hover:text-cyan transition-colors">
+          <img
+            src="/logo.png"
+            alt="DotFreelancer Logo"
+            className="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded-md drop-shadow-[0_0_10px_rgba(0,242,254,0.4)] transition-transform group-hover:scale-105"
+          />
+          <span className="flex items-center text-ink group-hover:text-cyan transition-colors font-bold">
             DOTFREELANCER
             <span className="font-mono text-cyan text-xs ml-1 opacity-80">&gt;</span>
           </span>

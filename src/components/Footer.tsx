@@ -24,8 +24,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] gap-10 pb-12 border-b border-line">
           {/* Brand Col */}
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 rounded-full bg-cyan shadow-[0_0_8px_#00f2fe]" />
+            <div className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="DotFreelancer Logo"
+                className="h-9 w-9 object-contain rounded-lg drop-shadow-[0_0_12px_rgba(0,242,254,0.4)]"
+              />
               <div className="font-display text-xl font-bold text-ink">DOTFREELANCER</div>
             </div>
             <p className="mt-3 font-mono text-[0.74rem] leading-relaxed text-ink-dim max-w-[40ch]">
