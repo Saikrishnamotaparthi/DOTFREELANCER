@@ -27,5 +27,5 @@ dist-ssr
 .env.*
 .env 
 
-/.webs/entry/.env
-/.webs/entry/.env.example
+/webs/entry/.env
+/webs/entry/.env.example
