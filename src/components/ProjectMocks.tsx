@@ -305,4 +305,30 @@ export const projectMocks: Record<string, () => ReactNode[]> = {
       <ChartBars values={[30, 48, 42, 60, 75, 68, 88]} />
     </div>,
   ],
+
+  'anvayaa-productions': () => [
+    <div className={shell} key="portfolio">
+      <MiniNav brand="Anvayaa" tabs={['Home', 'Portfolio', 'Services', 'Contact']} active="Portfolio" />
+      <div className="space-y-2.5">
+        <FoodItem name="Grand Palace Wedding" desc="Jaipur · Heritage luxury production" price="Dec 2026" />
+        <FoodItem name="Sunset Beach Vows" desc="Goa · Coastal floral design" price="Nov 2026" />
+      </div>
+    </div>,
+    <div className={shell} key="services">
+      <div className="eyebrow">Production Services</div>
+      <div className="space-y-2.5">
+        <TicketTier name="Immersive Decor & Florals" price="Custom Theme" seats="Complete venue transformation" />
+        <TicketTier name="Elite Artist Management" price="Live Acts" seats="Coordination & stage design" />
+      </div>
+    </div>,
+    <div className={shell} key="dashboard">
+      <MiniNav brand="Event Coordinator" tabs={['Schedules', 'Vendors', 'Metrics']} active="Metrics" />
+      <div className="grid grid-cols-3 gap-2.5">
+        <StatTile label="Guests RSVP" value="1,200" />
+        <StatTile label="Vendors Active" value="34" />
+        <StatTile label="Decor Progress" value="85%" />
+      </div>
+      <ChartBars values={[20, 35, 50, 65, 75, 80, 85]} />
+    </div>,
+  ],
 };

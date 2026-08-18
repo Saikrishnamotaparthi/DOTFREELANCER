@@ -1,4 +1,4 @@
-import { Children, useRef, type ReactNode } from 'react';
+import { Children, useRef, useState, useEffect, type ReactNode } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 interface InterfaceDeckProps {
@@ -16,6 +16,27 @@ interface InterfaceDeckProps {
 export default function InterfaceDeck({ children, className = '' }: InterfaceDeckProps) {
   const deckRef = useRef<HTMLDivElement>(null);
   const panels = Children.toArray(children);
+  const [maxHeight, setMaxHeight] = useState<number>(0);
+
+  useEffect(() => {
+    const els = deckRef.current?.querySelectorAll<HTMLElement>('[data-deck-panel]');
+    if (!els || els.length === 0) return;
+
+    const measure = () => {
+      let max = 0;
+      els.forEach((el) => {
+        max = Math.max(max, el.scrollHeight);
+      });
+      setMaxHeight(max);
+    };
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    els.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [panels.length]);
 
   useScrollAnimation(
     deckRef,
@@ -50,9 +71,13 @@ export default function InterfaceDeck({ children, className = '' }: InterfaceDec
   }
 
   return (
-    <div ref={deckRef} className={`relative ${className}`}>
+    <div
+      ref={deckRef}
+      className={`relative ${className}`}
+      style={{ minHeight: maxHeight ? `${maxHeight}px` : undefined }}
+    >
       {panels.map((panel, i) => (
-        <div key={i} data-deck-panel className={i === 0 ? 'relative' : 'absolute inset-0'}>
+        <div key={i} data-deck-panel className="absolute inset-x-0 top-0">
           {panel}
         </div>
       ))}

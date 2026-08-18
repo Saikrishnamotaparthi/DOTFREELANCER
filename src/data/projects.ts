@@ -96,7 +96,7 @@ export const projects: Project[] = [
     technologies: ['React', 'Node.js', 'Stripe'],
   },
   {
-    id: 'event-management',
+    id: 'anvayaa-productions',
     title: 'Anvayaa Productions',
     // TODO: replace with the live project URL.
     url: 'https://www.anvayaaproductions.in/',
