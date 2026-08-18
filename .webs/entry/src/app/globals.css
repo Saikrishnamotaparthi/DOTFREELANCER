@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #0072FF;
+  --color-brand-secondary: #002A54;
+  --color-brand-accent: #00F0FF;
+  
+  --color-navy-950: #020208;
+  --color-navy-900: #070714;
+  --color-navy-850: #0C0C24;
+  --color-navy-800: #14143a;
+  --color-navy-700: #20205d;
+  
+  --color-text-primary: #F3F4F6;
+  --color-text-secondary: #A3A3C2;
+  --color-text-muted: #626285;
+
+  --font-sans: var(--font-plus-jakarta-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-space-grotesk), monospace;
+}
+
+:root {
+  color-scheme: dark;
+  --background: #020208;
+  --foreground: #F3F4F6;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #020208;
+}
+::-webkit-scrollbar-thumb {
+  background: #14143a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #20205d;
+}
+
+/* Drifting Background Orbs Keyframes */
+@keyframes float1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(40px, 60px) scale(1.15);
+  }
+}
+
+@keyframes float2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1.1);
+  }
+  50% {
+    transform: translate(-50px, -40px) scale(0.9);
+  }
+}
+
+.animate-orb-float-1 {
+  animation: float1 18s ease-in-out infinite;
+}
+
+.animate-orb-float-2 {
+  animation: float2 14s ease-in-out infinite;
+}
+
+/* Scanner HUD Laser Line Keyframe */
+@keyframes laser-sweep {
+  0% {
+    top: 5%;
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 95%;
+    opacity: 0;
+  }
+}
+
+.animate-scan-line {
+  animation: laser-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Glow Shadow effects */
+.glow-shadow {
+  box-shadow: 0 0 30px rgba(0, 114, 255, 0.18);
+}
+
+.glow-shadow-accent {
+  box-shadow: 0 0 35px rgba(0, 240, 255, 0.22);
+}
+
+.glow-shadow-success {
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.25);
+}
+
+.glow-shadow-danger {
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.25);
+}
+
+/* Cybernetic Glass Card Panels */
+.glass-panel {
+  background: rgba(12, 12, 36, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(0, 114, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 25px rgba(0, 114, 255, 0.1);
+}
+
+.glass-panel-heavy {
+  background: rgba(7, 7, 20, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Cyber Outlined Inputs */
+.glass-input {
+  background: rgba(2, 2, 8, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-sans);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-input:focus {
+  background: rgba(2, 2, 8, 0.9);
+  border-color: #00F0FF;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  outline: none;
+}
+
+/* Glowing dots background pattern */
+.grid-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: 
+    radial-gradient(rgba(0, 114, 255, 0.08) 1.5px, transparent 1.5px),
+    radial-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
+  opacity: 0.65;
+}
+
+.glow-glow {
+  filter: drop-shadow(0 0 20px rgba(0, 114, 255, 0.3));
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+}
+
+.glow-text-blue {
+  text-shadow: 0 0 12px rgba(0, 114, 255, 0.5);
+}
