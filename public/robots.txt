@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dotfreelancer.dev/sitemap.xml
+Sitemap: https://dotfreelancer.in/sitemap.xml

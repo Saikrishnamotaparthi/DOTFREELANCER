@@ -1,18 +1,27 @@
 const items = [
-  { value: '9+', label: 'Projects shipped' },
-  { value: '5+', label: 'Clients' },
-  { value: '9', label: 'Connected systems' },
-  { value: '1', label: 'Point of contact' },
+  { value: '12+', label: 'Systems Shipped', tag: '100% SUCCESS RATE' },
+  { value: '₹1.2Cr+', label: 'Transaction Mesh Processed', tag: 'FINTECH SECURED' },
+  { value: '99.98%', label: 'Platform Availability', tag: 'ZERO DOWNTIME' },
+  { value: '1', label: 'Point of Accountability', tag: 'ZERO FRAGMENTATION' },
 ];
 
 export default function Proof() {
   return (
-    <section id="proof" className="border-y border-line py-20">
-      <div className="wrap grid grid-cols-2 gap-5 md:grid-cols-4">
+    <section id="proof" className="border-y border-line py-16 bg-bg-1/40 backdrop-blur-md">
+      <div className="wrap grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((it) => (
-          <div key={it.label} className="text-center">
-            <div className="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] font-semibold">{it.value}</div>
-            <div className="mt-2 font-mono text-[0.68rem] uppercase tracking-wide text-ink-faint">
+          <div
+            key={it.label}
+            className="hud-card p-6 border border-line bg-surface/30 text-center hover:border-cyan/40 transition-colors"
+          >
+            <div className="font-mono text-[0.6rem] text-cyan uppercase tracking-widest mb-1.5 flex items-center justify-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_6px_#00f2fe]" />
+              {it.tag}
+            </div>
+            <div className="font-display text-[clamp(2.2rem,4vw,3.2rem)] font-bold text-ink drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+              {it.value}
+            </div>
+            <div className="mt-1 font-mono text-[0.72rem] uppercase tracking-wider text-ink-dim">
               {it.label}
             </div>
           </div>

@@ -20,10 +20,19 @@ const emptyPayload: ContactPayload = {
   website: '', // honeypot
 };
 
+const featurePills = [
+  'Payment Gateway (Razorpay/Stripe)',
+  'WhatsApp Cloud Notifications',
+  'Admin CRM & Analytics Desk',
+  'User Auth & Role Management',
+  'AI Agent / Workflow Automation',
+  'QR Code & Ticket Generation',
+];
+
 const nextSteps = [
-  { num: '01', text: "I read your brief and check it against what's technically involved." },
-  { num: '02', text: 'You hear back from me directly — usually within a day.' },
-  { num: '03', text: "If it's a fit, we hop on a call or WhatsApp to scope it properly." },
+  { num: '01', text: 'Architectural Review: I evaluate your project requirements against technical specifications.' },
+  { num: '02', text: 'Direct Response: You receive a response from me directly — usually within 2 to 6 hours.' },
+  { num: '03', text: 'Turnkey Sprint: We finalize the roadmap and begin live end-to-end execution.' },
 ];
 
 function referenceId() {
@@ -32,6 +41,7 @@ function referenceId() {
 
 export default function Contact() {
   const [payload, setPayload] = useState<ContactPayload>(emptyPayload);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
   const [state, setState] = useState<FormState>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -41,6 +51,18 @@ export default function Contact() {
   function update<K extends keyof ContactPayload>(key: K, value: ContactPayload[K]) {
     setPayload((p) => ({ ...p, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
+  }
+
+  function toggleFeature(feature: string) {
+    const next = selectedFeatures.includes(feature)
+      ? selectedFeatures.filter((f) => f !== feature)
+      : [...selectedFeatures, feature];
+    setSelectedFeatures(next);
+
+    // Append / sync selected features to the message field if empty or update note
+    if (!payload.message.includes('Features included:')) {
+      update('message', payload.message ? `${payload.message}\n\nFeatures required: ${next.join(', ')}` : `Features required: ${next.join(', ')}`);
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -68,51 +90,50 @@ export default function Contact() {
 
   if (state === 'success') {
     return (
-      <section id="contact" className="relative overflow-hidden py-45 text-center">
+      <section id="contact" className="relative overflow-hidden py-36 text-center">
         <Glow />
         <div className="wrap relative">
           <Glass
             variant="smoked"
-            className="success-in mx-auto max-w-[560px] px-7 py-14 sm:px-14"
+            className="success-in mx-auto max-w-[620px] p-8 sm:p-14 border border-cyan/30 bg-bg-1/95 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(0,242,254,0.15)]"
           >
-            <div className="relative mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-brass/50">
-              <span className="absolute inset-0 rounded-full border border-brass/20" style={{ transform: 'scale(1.4)' }} />
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <div className="relative mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-cyan/50 bg-cyan/10">
+              <span className="absolute inset-0 rounded-full border border-cyan/30 animate-ping" />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M4 12.5L9.5 18L20 6"
-                  stroke="var(--color-brass)"
-                  strokeWidth="2"
+                  stroke="#00f2fe"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
             </div>
 
-            <div className="eyebrow mb-3">Project received</div>
-            <h2 className="font-display text-[clamp(1.9rem,5vw,2.8rem)] font-semibold leading-[1.05]">
+            <div className="cyber-badge-emerald mb-3">● PROJECT BRIEF TRANSMITTED</div>
+            <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold text-ink">
               Thank you, {payload.name.split(' ')[0]}.
             </h2>
-            <p className="mx-auto mt-5 max-w-[42ch] text-ink-dim">
-              Your project details are with me. A confirmation is on its way to{' '}
-              <span className="text-ink">{payload.email}</span> — and here's exactly what happens from here.
+            <p className="mx-auto mt-4 max-w-[44ch] text-ink-dim text-[0.96rem] leading-relaxed">
+              Your system specifications have been ingested. A confirmation receipt is dispatched to{' '}
+              <span className="text-cyan font-mono">{payload.email}</span>.
             </p>
 
-            <div className="mx-auto mt-10 max-w-[420px] space-y-5 border-t border-line pt-8 text-left">
+            <div className="mx-auto mt-10 max-w-[460px] space-y-4 border-t border-line pt-8 text-left">
               {nextSteps.map((step) => (
                 <div key={step.num} className="flex gap-4">
-                  <span className="font-mono text-[0.7rem] text-brass">{step.num}</span>
-                  <span className="text-[0.9rem] leading-relaxed text-ink-dim">{step.text}</span>
+                  <span className="font-mono text-xs text-cyan font-bold">{step.num} //</span>
+                  <span className="text-[0.88rem] leading-relaxed text-ink-dim">{step.text}</span>
                 </div>
               ))}
             </div>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-
               <a
                 href="#hero"
-                className="inline-flex items-center gap-2.5 rounded-full border border-line-strong px-6.5 py-3.5 text-[0.88rem] text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-brass"
+                className="inline-flex items-center gap-2.5 rounded-xl border border-line-strong px-6 py-3.5 font-mono text-[0.78rem] uppercase tracking-wider text-ink transition-all duration-300 hover:border-cyan hover:text-cyan"
               >
-                Back to DotFreelancer
+                Return to Top
               </a>
 
               <a
@@ -120,49 +141,69 @@ export default function Contact() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="project"
-                className="inline-flex items-center gap-2.5 rounded-full bg-ink px-6.5 py-3.5 text-[0.88rem] font-medium text-[#0a0a0a] transition-transform duration-300 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan to-signal px-7 py-3.5 font-mono text-[0.78rem] font-semibold uppercase tracking-wider text-bg-0 shadow-[0_0_20px_rgba(0,242,254,0.4)] hover:scale-105 transition-all"
               >
-                Chat on WhatsApp →
+                Instant WhatsApp Chat →
               </a>
-        </div>
+            </div>
 
-        <div className="mt-9 font-mono text-[0.64rem] tracking-wide text-ink-faint">Reference {refId}</div>
+            <div className="mt-8 font-mono text-[0.64rem] tracking-wider text-ink-faint">
+              DOSSIER IDENTIFIER // {refId}
+            </div>
           </Glass>
         </div>
-
-        <style>{`
-          @keyframes success-in {
-            from { opacity: 0; transform: translateY(18px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          .success-in { animation: success-in 0.6s cubic-bezier(.16,1,.3,1); }
-          @media (prefers-reduced-motion: reduce) {
-            .success-in { animation: none; }
-          }
-        `}</style>
       </section>
     );
   }
 
   return (
-    <section id="contact" className="relative overflow-hidden py-45">
+    <section id="contact" className="py-24 md:py-36 relative overflow-hidden">
       <Glow />
       <div className="wrap relative">
-        <div className="text-center">
-          <div className="eyebrow mb-5 flex justify-center">Let's build it</div>
-          <h2 className="font-display text-[clamp(2.4rem,8vw,5.6rem)] font-semibold leading-[0.98]">
-            What are we
-            <br />
-            building?
+        <div className="text-center pb-12">
+          <div className="eyebrow mb-4 flex justify-center">Engineering Intake</div>
+          <h2 className="font-display text-[clamp(2.4rem,7vw,5.2rem)] font-bold leading-[0.98]">
+            Let’s build your <br />
+            <span className="bg-gradient-to-r from-cyan to-signal bg-clip-text text-transparent">
+              complete digital system.
+            </span>
           </h2>
-          <p className="mx-auto mt-6 max-w-[46ch] text-ink-dim">
-            Tell me what you're starting, and I'll tell you exactly how it gets built.
+          <p className="mx-auto mt-5 max-w-[48ch] text-[1.02rem] text-ink-dim leading-relaxed">
+            Specify your requirements below. I’ll evaluate your architecture and provide a turnkey deployment plan.
           </p>
         </div>
 
-        <Glass variant="smoked" className="mx-auto mt-16 max-w-[760px] p-6 md:p-10">
+        {/* Customer Interactive Feature Selector */}
+        <div className="mx-auto max-w-[820px] mb-8 rounded-2xl border border-cyan/20 bg-bg-1/80 backdrop-blur-2xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
+          <div className="font-mono text-[0.68rem] text-cyan uppercase tracking-widest mb-3">
+            INTERACTIVE SCOPE CONFIGURATOR // SELECT DESIRED MODULES
+          </div>
+          <div className="flex flex-wrap gap-2.5">
+            {featurePills.map((feature) => {
+              const isSelected = selectedFeatures.includes(feature);
+              return (
+                <button
+                  key={feature}
+                  type="button"
+                  onClick={() => toggleFeature(feature)}
+                  className={`px-3.5 py-2 rounded-xl font-mono text-[0.72rem] transition-all duration-300 flex items-center gap-2 ${
+                    isSelected
+                      ? 'border border-cyan bg-cyan/20 text-cyan shadow-[0_0_15px_rgba(0,242,254,0.25)] font-semibold'
+                      : 'border border-line bg-surface/50 text-ink-dim hover:border-line-strong hover:text-ink'
+                  }`}
+                >
+                  <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? 'bg-cyan' : 'bg-ink-faint'}`} />
+                  <span>{feature}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Form Container */}
+        <Glass variant="smoked" className="mx-auto max-w-[820px] p-6 sm:p-10 border border-line-strong bg-bg-1/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
           <form ref={formRef} onSubmit={handleSubmit} noValidate className="relative space-y-6">
-            {/* Honeypot — hidden from real visitors, left in the tab flow for screen readers via aria-hidden on the wrapper instead of display:none */}
+            {/* Honeypot */}
             <div className="absolute -left-[9999px] opacity-0" aria-hidden="true">
               <label>
                 Company website
@@ -178,16 +219,16 @@ export default function Contact() {
             </div>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FieldWrap label="Name" required error={errors.name}>
+              <FieldWrap label="Your Name" required error={errors.name}>
                 <TextField
                   value={payload.name}
                   onChange={(e) => update('name', e.target.value)}
                   error={errors.name}
-                  placeholder="Your name"
+                  placeholder="e.g. Rahul Sharma"
                   autoComplete="name"
                 />
               </FieldWrap>
-              <FieldWrap label="Email" required error={errors.email}>
+              <FieldWrap label="Email Address" required error={errors.email}>
                 <TextField
                   type="email"
                   value={payload.email}
@@ -200,33 +241,33 @@ export default function Contact() {
             </div>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FieldWrap label="Phone / WhatsApp" required error={errors.phone}>
+              <FieldWrap label="Phone / WhatsApp Number" required error={errors.phone}>
                 <TextField
                   type="tel"
                   value={payload.phone}
                   onChange={(e) => update('phone', e.target.value)}
                   error={errors.phone}
-                  placeholder="+91 00000 00000"
+                  placeholder="+91 98765 43210"
                   autoComplete="tel"
                 />
               </FieldWrap>
-              <FieldWrap label="Company / Organization" hint="Optional">
+              <FieldWrap label="Company / Brand" hint="Optional">
                 <TextField
                   value={payload.company}
                   onChange={(e) => update('company', e.target.value)}
-                  placeholder="Where you work"
+                  placeholder="e.g. Acme Innovations"
                   autoComplete="organization"
                 />
               </FieldWrap>
             </div>
 
-            <FieldWrap label="What do you want to build?" required error={errors.projectType}>
+            <FieldWrap label="System Architecture Type" required error={errors.projectType}>
               <SelectField
                 value={payload.projectType}
                 onChange={(e) => update('projectType', e.target.value as ContactPayload['projectType'])}
                 error={errors.projectType}
               >
-                <option value="">Choose a project type</option>
+                <option value="">Select project classification</option>
                 {projectTypeOptions.map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
@@ -235,35 +276,40 @@ export default function Contact() {
               </SelectField>
             </FieldWrap>
 
-            <FieldWrap label="Project details" required error={errors.message} hint={`${payload.message.length} chars`}>
+            <FieldWrap
+              label="Project Scope &amp; Deliverables"
+              required
+              error={errors.message}
+              hint={`${payload.message.length} characters`}
+            >
               <TextAreaField
                 rows={5}
                 value={payload.message}
                 onChange={(e) => update('message', e.target.value)}
                 error={errors.message}
-                placeholder="What are you building, who is it for, and what's already in place?"
+                placeholder="Describe what you want to build, who your users are, and any existing tools or workflows in place..."
               />
             </FieldWrap>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FieldWrap label="Budget" hint="Optional">
+              <FieldWrap label="Target Budget Estimate" hint="Optional">
                 <TextField
                   value={payload.budget}
                   onChange={(e) => update('budget', e.target.value)}
-                  placeholder="e.g. ₹1.5L – ₹3L"
+                  placeholder="e.g. ₹1.5L – ₹3.5L or $2k–$5k"
                 />
               </FieldWrap>
-              <FieldWrap label="Timeline" hint="Optional">
+              <FieldWrap label="Target Launch Date" hint="Optional">
                 <TextField
                   value={payload.timeline}
                   onChange={(e) => update('timeline', e.target.value)}
-                  placeholder="e.g. Launch in 6 weeks"
+                  placeholder="e.g. Within 4 weeks"
                 />
               </FieldWrap>
             </div>
 
             {state === 'error' && (
-              <div className="rounded-lg border border-red-400/30 bg-red-400/[0.04] px-4 py-3.5 text-[0.86rem] text-red-300">
+              <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-[0.88rem] text-red-300">
                 {errorMessage}
               </div>
             )}
@@ -272,24 +318,24 @@ export default function Contact() {
               type="submit"
               disabled={state === 'submitting'}
               data-cursor="project"
-              className="w-full rounded-full bg-ink px-6.5 py-4 text-center text-[0.9rem] font-medium tracking-wide text-[#0a0a0a] transition-all duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-xl bg-gradient-to-r from-cyan to-signal py-4 text-center font-mono text-[0.84rem] font-bold uppercase tracking-wider text-bg-0 shadow-[0_0_25px_rgba(0,242,254,0.4)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,242,254,0.6)] hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {state === 'submitting' ? 'Sending…' : 'Send project brief'}
+              {state === 'submitting' ? 'Transmitting Specifications…' : 'Submit Project Specifications →'}
             </button>
           </form>
         </Glass>
 
-        <div className="mx-auto mt-10 max-w-[760px] text-center">
-          <p className="text-[0.86rem] text-ink-faint">
-            Prefer a quick conversation?{' '}
-
+        {/* WhatsApp Direct Option */}
+        <div className="mx-auto mt-10 max-w-[820px] text-center">
+          <p className="text-[0.9rem] text-ink-faint">
+            Need an immediate discussion?{' '}
             <a
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-ink-dim underline decoration-line-strong underline-offset-4 transition-colors hover:text-brass"
+              className="text-cyan font-mono underline decoration-cyan/40 underline-offset-4 hover:text-white transition-colors"
             >
-              Chat with me directly on WhatsApp →
+              Message Sai Krishna on WhatsApp →
             </a>
           </p>
         </div>
@@ -301,8 +347,8 @@ export default function Contact() {
 function Glow() {
   return (
     <div
-      className="pointer-events-none absolute -bottom-[20%] left-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full"
-      style={{ background: 'radial-gradient(circle, rgba(159,185,201,0.08), transparent 60%)' }}
+      className="pointer-events-none absolute -bottom-[20%] left-1/2 h-[800px] w-[800px] -translate-x-1/2 rounded-full"
+      style={{ background: 'radial-gradient(circle, rgba(0,242,254,0.06), transparent 70%)' }}
     />
   );
 }

@@ -1,19 +1,23 @@
 import type { ReactNode } from 'react';
 
 /* ---------------------------------------------------------------
-   Shared UI atoms — small, reusable pieces that make each mockup
-   read as a real product surface rather than a wireframe box.
+   Shared UI atoms — futuristic micro-components for real product surfaces
    --------------------------------------------------------------- */
 
-function Chip({ children, tone = 'default' }: { children: ReactNode; tone?: 'default' | 'brass' | 'faint' }) {
+function Chip({ children, tone = 'default' }: { children: ReactNode; tone?: 'default' | 'cyan' | 'brass' | 'emerald' | 'faint' }) {
   const toneClass =
-    tone === 'brass'
-      ? 'border-brass/50 text-brass'
+    tone === 'cyan'
+      ? 'border-cyan/40 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,242,254,0.15)]'
+      : tone === 'brass'
+      ? 'border-brass/40 bg-brass/10 text-brass'
+      : tone === 'emerald'
+      ? 'border-emerald/40 bg-emerald/10 text-emerald-400'
       : tone === 'faint'
-        ? 'border-line text-ink-faint'
-        : 'border-line-strong text-ink-dim';
+      ? 'border-line bg-white/5 text-ink-faint'
+      : 'border-line-strong bg-surface/60 text-ink-dim';
+
   return (
-    <span className={`rounded-full border px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-wide ${toneClass}`}>
+    <span className={`rounded-full border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-wider ${toneClass}`}>
       {children}
     </span>
   );
@@ -21,14 +25,17 @@ function Chip({ children, tone = 'default' }: { children: ReactNode; tone?: 'def
 
 function MiniNav({ brand, tabs, active }: { brand: string; tabs: string[]; active?: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-line pb-3">
-      <div className="font-display text-[0.82rem] font-semibold">{brand}</div>
-      <div className="hidden gap-3 sm:flex">
+    <div className="flex items-center justify-between border-b border-line pb-3.5">
+      <div className="flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_6px_#00f2fe]" />
+        <span className="font-display text-[0.88rem] font-bold text-ink">{brand}</span>
+      </div>
+      <div className="flex gap-2 sm:gap-3">
         {tabs.map((t) => (
           <span
             key={t}
-            className={`font-mono text-[0.6rem] uppercase tracking-wide ${
-              t === active ? 'text-brass' : 'text-ink-faint'
+            className={`font-mono text-[0.62rem] uppercase tracking-wider transition-colors px-2 py-0.5 rounded ${
+              t === active ? 'bg-cyan/15 text-cyan font-semibold' : 'text-ink-faint'
             }`}
           >
             {t}
@@ -51,16 +58,16 @@ function FoodItem({
   available?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-line px-3.5 py-3">
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface/40 px-4 py-3 hover:border-cyan/30 transition-colors">
       <div className="min-w-0">
-        <div className="truncate text-[0.82rem] text-ink">{name}</div>
-        <div className="truncate font-mono text-[0.62rem] text-ink-faint">{desc}</div>
+        <div className="truncate text-[0.85rem] font-medium text-ink">{name}</div>
+        <div className="truncate font-mono text-[0.64rem] text-ink-faint">{desc}</div>
       </div>
       <div className="flex flex-none items-center gap-2.5">
-        <span className="font-mono text-[0.74rem] text-ink-dim">{price}</span>
+        <span className="font-mono text-[0.78rem] text-cyan font-semibold">{price}</span>
         {available ? (
           <span
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-line-strong text-[0.8rem] leading-none text-ink transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-cyan/40 bg-cyan/10 text-cyan text-[0.82rem] leading-none hover:bg-cyan hover:text-bg-0 transition-colors"
             aria-hidden="true"
           >
             +
@@ -81,9 +88,9 @@ function DataTable({
   rows: (string | ReactNode)[][];
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-line">
+    <div className="overflow-hidden rounded-xl border border-line bg-bg-0/60">
       <div
-        className="grid gap-2 border-b border-line bg-white/[0.03] px-3.5 py-2.5 font-mono text-[0.6rem] uppercase tracking-wide text-ink-faint"
+        className="grid gap-2 border-b border-line bg-white/[0.04] px-4 py-3 font-mono text-[0.62rem] uppercase tracking-wider text-ink-faint"
         style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0,1fr))` }}
       >
         {columns.map((c) => (
@@ -95,7 +102,7 @@ function DataTable({
       {rows.map((row, ri) => (
         <div
           key={ri}
-          className="grid items-center gap-2 px-3.5 py-2.5 text-[0.74rem] text-ink-dim"
+          className="grid items-center gap-2 px-4 py-3 text-[0.78rem] text-ink-dim border-b border-line/40 last:border-b-0 hover:bg-white/[0.02]"
           style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0,1fr))` }}
         >
           {row.map((cell, ci) => (
@@ -110,26 +117,30 @@ function DataTable({
 }
 
 function StatusBadge({ status }: { status: 'Paid' | 'Preparing' | 'Ready' | 'Pending' | 'Verified' }) {
-  const tone = status === 'Pending' ? 'faint' : status === 'Preparing' ? 'default' : 'brass';
-  return <Chip tone={tone as 'default' | 'brass' | 'faint'}>{status}</Chip>;
+  const tone = status === 'Pending' ? 'faint' : status === 'Preparing' ? 'cyan' : status === 'Ready' ? 'brass' : 'emerald';
+  return <Chip tone={tone as 'default' | 'cyan' | 'brass' | 'emerald' | 'faint'}>{status}</Chip>;
 }
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-line px-3.5 py-3">
-      <div className="font-display text-[1.1rem] font-semibold">{value}</div>
-      <div className="mt-1 font-mono text-[0.58rem] uppercase tracking-wide text-ink-faint">{label}</div>
+    <div className="rounded-xl border border-cyan/15 bg-surface/50 p-3.5 text-left">
+      <div className="font-mono text-[0.6rem] uppercase tracking-wider text-ink-faint">{label}</div>
+      <div className="font-display text-[1.2rem] font-bold text-cyan mt-1">{value}</div>
     </div>
   );
 }
 
 function ChartBars({ values }: { values: number[] }) {
   return (
-    <div className="flex h-16 items-end gap-1.5">
+    <div className="flex h-16 items-end gap-2 pt-2">
       {values.map((v, i) => (
         <div
           key={i}
-          className={`flex-1 rounded-t ${i === values.length - 1 ? 'bg-brass/50' : 'bg-white/8'}`}
+          className={`flex-1 rounded-t transition-all ${
+            i === values.length - 1
+              ? 'bg-gradient-to-t from-cyan to-signal shadow-[0_0_10px_rgba(0,242,254,0.4)]'
+              : 'bg-white/10 hover:bg-white/20'
+          }`}
           style={{ height: `${v}%` }}
         />
       ))}
@@ -139,15 +150,22 @@ function ChartBars({ values }: { values: number[] }) {
 
 function QRBlock({ label, status }: { label: string; status?: string }) {
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-line px-4 py-3.5">
-      <div className="grid h-14 w-14 flex-none grid-cols-5 grid-rows-5 gap-[2px] rounded bg-white/5 p-1.5" aria-hidden="true">
+    <div className="flex items-center gap-4 rounded-xl border border-cyan/30 bg-surface/50 p-4">
+      <div className="grid h-16 w-16 flex-none grid-cols-5 grid-rows-5 gap-[2px] rounded-lg bg-white/10 p-2 shadow-[0_0_15px_rgba(0,242,254,0.15)]" aria-hidden="true">
         {Array.from({ length: 25 }).map((_, i) => (
-          <span key={i} className={`rounded-[1px] ${[0, 3, 4, 6, 8, 12, 14, 16, 18, 20, 23].includes(i) ? 'bg-ink' : 'bg-transparent'}`} />
+          <span
+            key={i}
+            className={`rounded-[1px] ${
+              [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].includes(i)
+                ? 'bg-cyan shadow-[0_0_4px_#00f2fe]'
+                : 'bg-transparent'
+            }`}
+          />
         ))}
       </div>
       <div>
-        <div className="font-mono text-[0.68rem] tracking-wide text-ink-dim">{label}</div>
-        {status && <div className="mt-1 text-[0.78rem] text-brass">{status}</div>}
+        <div className="font-mono text-[0.72rem] tracking-wide text-ink font-semibold">{label}</div>
+        {status && <div className="mt-1 text-[0.76rem] font-mono text-emerald-400">● {status}</div>}
       </div>
     </div>
   );
@@ -155,14 +173,14 @@ function QRBlock({ label, status }: { label: string; status?: string }) {
 
 function TicketTier({ name, price, seats }: { name: string; price: string; seats: string }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-line px-3.5 py-3">
+    <div className="flex items-center justify-between rounded-xl border border-line bg-surface/40 px-4 py-3 hover:border-cyan/30 transition-colors">
       <div>
-        <div className="text-[0.82rem] text-ink">{name}</div>
-        <div className="font-mono text-[0.6rem] text-ink-faint">{seats}</div>
+        <div className="text-[0.85rem] font-medium text-ink">{name}</div>
+        <div className="font-mono text-[0.62rem] text-ink-faint">{seats}</div>
       </div>
       <div className="flex items-center gap-3">
-        <span className="font-mono text-[0.78rem] text-ink-dim">{price}</span>
-        <span className="rounded-full border border-line-strong px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-wide text-ink">
+        <span className="font-mono text-[0.82rem] font-semibold text-cyan">{price}</span>
+        <span className="rounded-full border border-cyan/40 bg-cyan/10 px-3 py-1 font-mono text-[0.62rem] uppercase tracking-wider text-cyan hover:bg-cyan hover:text-bg-0 transition-colors">
           Select
         </span>
       </div>
@@ -172,17 +190,17 @@ function TicketTier({ name, price, seats }: { name: string; price: string; seats
 
 function PaymentState() {
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between rounded-lg border border-line px-3.5 py-3">
-        <span className="font-mono text-[0.7rem] tracking-[0.15em] text-ink-dim">•••• •••• •••• 4821</span>
-        <Chip tone="faint">VISA</Chip>
+    <div className="space-y-3.5 rounded-xl border border-line bg-surface/40 p-4">
+      <div className="flex items-center justify-between rounded-lg border border-line bg-bg-0/60 px-4 py-3">
+        <span className="font-mono text-[0.72rem] tracking-[0.2em] text-cyan">•••• •••• •••• 9012</span>
+        <Chip tone="emerald">SECURE UPI / CARD</Chip>
       </div>
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-[0.62rem] uppercase tracking-wide text-ink-faint">Total</span>
-        <span className="font-display text-[1.05rem] font-semibold">₹2,400.00</span>
+      <div className="flex items-center justify-between px-1">
+        <span className="font-mono text-[0.66rem] uppercase tracking-wider text-ink-faint">TOTAL AUTHORIZED</span>
+        <span className="font-display text-[1.15rem] font-bold text-ink">₹2,400.00</span>
       </div>
-      <div className="rounded-full bg-ink px-4 py-2.5 text-center font-mono text-[0.68rem] uppercase tracking-wide text-[#0a0a0a]">
-        Confirm payment
+      <div className="rounded-xl bg-gradient-to-r from-cyan to-signal px-4 py-3 text-center font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-bg-0 shadow-[0_0_20px_rgba(0,242,254,0.3)]">
+        Confirm &amp; Generate Instant QR
       </div>
     </div>
   );
@@ -195,52 +213,104 @@ function PaymentState() {
 const shell = 'flex flex-col gap-4';
 
 export const projectMocks: Record<string, () => ReactNode[]> = {
+  solevault: () => [
+    <div className={shell} key="catalog">
+      <MiniNav brand="SoleVault Storefront" tabs={['Sneakers', 'Streetwear', 'Cart (2)']} active="Sneakers" />
+      <div className="space-y-2.5">
+        <FoodItem name="Air Jordan 1 Retro High OG" desc="Chicago Lost &amp; Found · Size UK 9 · Verified Authentic" price="₹16,499" />
+        <FoodItem name="Yeezy Boost 350 V2 Carbon" desc="Primeknit Upper · Boost Midsole · In Stock" price="₹22,999" />
+      </div>
+    </div>,
+    <div className={shell} key="logistics">
+      <div className="flex items-center justify-between">
+        <div className="eyebrow">Delhivery Automated Dispatch</div>
+        <Chip tone="emerald">AWB #DEL-984210</Chip>
+      </div>
+      <div className="rounded-xl border border-cyan/20 bg-surface/50 p-4 space-y-3">
+        <div className="flex items-center justify-between text-[0.84rem] text-ink font-mono">
+          <span>STATUS: OUT FOR DELIVERY</span>
+          <span className="text-cyan font-bold">ETA: TODAY 4:00 PM</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="h-1 flex-1 bg-gradient-to-r from-emerald-400 to-cyan rounded" />
+          <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
+          <span className="h-1 flex-1 bg-white/10 rounded" />
+          <span className="h-2 w-2 rounded-full bg-white/20" />
+        </div>
+        <div className="flex justify-between font-mono text-[0.6rem] text-ink-faint">
+          <span>WAREHOUSE PACKED</span>
+          <span>AIR HUB IN-TRANSIT</span>
+          <span>DELIVERED</span>
+        </div>
+      </div>
+    </div>,
+    <div className={shell} key="inventory">
+      <MiniNav brand="Warehouse &amp; Inventory Desk" tabs={['Live Stock', 'Low Alert', 'Suppliers']} active="Live Stock" />
+      <DataTable
+        columns={['SKU', 'Product', 'Stock', 'Logistics']}
+        rows={[
+          ['#AJ1-892', 'Air Jordan 1 Retro', '42 Pairs', <StatusBadge key="s1" status="Verified" />],
+          ['#YZY-350', 'Yeezy 350 V2', '12 Pairs', <StatusBadge key="s2" status="Ready" />],
+          ['#DNK-104', 'Nike Dunk Low Retro', '85 Pairs', <StatusBadge key="s3" status="Paid" />],
+        ]}
+      />
+    </div>,
+    <div className={shell} key="admin">
+      <MiniNav brand="SoleVault Revenue &amp; Analytics" tabs={['Overview', 'Fulfillment', 'Delhivery']} active="Overview" />
+      <div className="grid grid-cols-3 gap-2.5">
+        <StatTile label="Today Sales" value="₹3.84L" />
+        <StatTile label="Orders" value="184" />
+        <StatTile label="Dispatch SLA" value="99.4%" />
+      </div>
+      <ChartBars values={[40, 60, 55, 75, 90, 88, 98]} />
+    </div>,
+  ],
+
   'pro-nights': () => [
     <div className={shell} key="tickets">
-      <MiniNav brand="Pro Nights" tabs={['Lineup', 'Tickets', 'Venue']} active="Tickets" />
+      <MiniNav brand="PRAMANA'26 PLATFORM" tabs={['Lineup', 'Passes', 'Scanner']} active="Passes" />
       <div className="space-y-2.5">
-        <TicketTier name="Night pass" price="₹1,200" seats="Day 1 · GA" />
-        <TicketTier name="Weekend pass" price="₹2,400" seats="Day 1–3 · GA" />
-        <TicketTier name="VIP pass" price="₹4,800" seats="Day 1–3 · Front stage" />
+        <TicketTier name="Festival Access Pass" price="₹1,200" seats="Day 1–3 · All Stages" />
+        <TicketTier name="VIP Front Stage" price="₹2,800" seats="Priority Entry · Lounge Access" />
       </div>
     </div>,
     <div className={shell} key="payment">
-      <div className="eyebrow">Checkout</div>
+      <div className="eyebrow">Instant Gateway Checkout</div>
       <PaymentState />
     </div>,
     <div className={shell} key="qr">
-      <div className="eyebrow">Payment success</div>
-      <QRBlock label="Ticket #PN-48213" status="Valid · Weekend pass" />
+      <div className="eyebrow">Ticket Generated &amp; WhatsApp Synced</div>
+      <QRBlock label="Ticket #PRM-8921" status="Verified · Gate Access Granted" />
     </div>,
     <div className={shell} key="dashboard">
-      <MiniNav brand="Organizer" tabs={['Overview', 'Scans', 'Payouts']} active="Overview" />
+      <MiniNav brand="Organizer HUD" tabs={['Overview', 'Live Scans', 'Revenue']} active="Overview" />
       <div className="grid grid-cols-3 gap-2.5">
-        <StatTile label="Tickets sold" value="3,214" />
-        <StatTile label="Revenue" value="₹41.2L" />
-        <StatTile label="Check-ins" value="1,890" />
+        <StatTile label="Passes Issued" value="4,820" />
+        <StatTile label="Revenue" value="₹58.4L" />
+        <StatTile label="Gate Scans" value="3,940" />
       </div>
-      <ChartBars values={[40, 55, 48, 70, 65, 90, 78]} />
+      <ChartBars values={[35, 50, 45, 70, 85, 92, 98]} />
     </div>,
   ],
 
   restaurant: () => [
     <div className={shell} key="menu">
-      <MiniNav brand="Casa Verde" tabs={['Starters', 'Mains', 'Desserts']} active="Mains" />
+      <MiniNav brand="Casa Verde Live System" tabs={['Starters', 'Mains', 'QR Pay']} active="Mains" />
       <div className="space-y-2.5">
-        <FoodItem name="Wood-fired margherita" desc="San marzano · basil · fior di latte" price="₹420" />
-        <FoodItem name="Truffle mushroom risotto" desc="Arborio · parmesan · truffle oil" price="₹540" />
-        <FoodItem name="Grilled seabass" desc="Lemon butter · charred greens" price="₹690" available={false} />
+        <FoodItem name="Artisanal Truffle Pizza" desc="Fior di latte · fresh truffles · wild mushrooms" price="₹540" />
+        <FoodItem name="Handcrafted Gnocchi" desc="Sage butter · aged parmesan crisp" price="₹480" />
       </div>
-      <QRBlock label="Scan to order at table 12" />
+      <QRBlock label="Scan QR at Table 08 to Order &amp; Pay" />
     </div>,
     <div className={shell} key="orders">
-      <MiniNav brand="Admin" tabs={['Menu', 'Orders', 'Reports']} active="Orders" />
+      <MiniNav brand="Kitchen &amp; Admin Desk" tabs={['Active Orders', 'Analytics', 'Menu']} active="Active Orders" />
       <DataTable
-        columns={['Order', 'Customer', 'Items', 'Status', 'Amount']}
+        columns={['Order', 'Table', 'Status', 'Total']}
         rows={[
-          ['#4821', 'Table 12', '3 items', <StatusBadge key="s1" status="Preparing" />, '₹1,650'],
-          ['#4820', 'Table 07', '2 items', <StatusBadge key="s2" status="Ready" />, '₹960'],
-          ['#4819', 'Takeaway', '5 items', <StatusBadge key="s3" status="Paid" />, '₹2,310'],
+          ['#5021', 'Table 08', <StatusBadge key="s1" status="Preparing" />, '₹1,840'],
+          ['#5020', 'Table 14', <StatusBadge key="s2" status="Ready" />, '₹960'],
+          ['#5019', 'Delivery', <StatusBadge key="s3" status="Paid" />, '₹2,350'],
         ]}
       />
     </div>,
@@ -248,87 +318,78 @@ export const projectMocks: Record<string, () => ReactNode[]> = {
 
   school: () => [
     <div className={shell} key="admissions">
-      <MiniNav brand="Greenfield School" tabs={['Admissions', 'Academics', 'Gallery']} active="Admissions" />
-      <div className="space-y-2.5 rounded-lg border border-line p-3.5">
-        <div className="font-mono text-[0.6rem] uppercase tracking-wide text-ink-faint">Application — Grade 6</div>
-        <div className="h-2 w-3/4 rounded bg-white/8" />
-        <div className="h-2 w-1/2 rounded bg-white/8" />
-        <div className="flex items-center justify-between pt-1">
-          <Chip tone="brass">Applications open</Chip>
-          <span className="font-mono text-[0.62rem] text-ink-faint">Closes 30 Sep</span>
+      <MiniNav brand="Greenfield Academy Portal" tabs={['Admissions', 'Academics', 'Fee Desk']} active="Admissions" />
+      <div className="space-y-2.5 rounded-xl border border-line bg-surface/40 p-4">
+        <div className="font-mono text-[0.62rem] uppercase tracking-wider text-cyan">Admissions 2026–27 Open</div>
+        <div className="h-2 w-3/4 rounded bg-white/10" />
+        <div className="h-2 w-1/2 rounded bg-white/10" />
+        <div className="flex items-center justify-between pt-2">
+          <Chip tone="emerald">Application Submitted</Chip>
+          <span className="font-mono text-[0.64rem] text-ink-faint">Status: Verified</span>
         </div>
       </div>
     </div>,
     <div className={shell} key="parent">
-      <MiniNav brand="Parent portal" tabs={['Announcements', 'Gallery', 'Fees']} active="Announcements" />
+      <MiniNav brand="Parent &amp; Student Desk" tabs={['Announcements', 'Fees', 'Attendance']} active="Announcements" />
       <div className="space-y-2">
-        {['Sports day rescheduled to Friday', 'Term 2 fee window now open', 'New library wing photos added'].map(
+        {['Annual Sports Meet schedule released', 'Q3 Term fee receipt generated automatically', 'Digital report cards published to parent app'].map(
           (n) => (
-            <div key={n} className="flex items-center gap-2.5 rounded-lg border border-line px-3.5 py-2.5">
-              <span className="h-1.5 w-1.5 flex-none rounded-full bg-brass" />
-              <span className="truncate text-[0.76rem] text-ink-dim">{n}</span>
+            <div key={n} className="flex items-center gap-3 rounded-xl border border-line bg-surface/30 px-3.5 py-2.5">
+              <span className="h-2 w-2 flex-none rounded-full bg-cyan" />
+              <span className="truncate text-[0.82rem] text-ink">{n}</span>
             </div>
           ),
         )}
-      </div>
-      <div className="grid grid-cols-4 gap-1.5" aria-hidden="true">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="aspect-square rounded bg-white/6" />
-        ))}
       </div>
     </div>,
   ],
 
   'event-management': () => [
     <div className={shell} key="discovery">
-      <MiniNav brand="Eventful" tabs={['Discover', 'My tickets', 'Host']} active="Discover" />
+      <MiniNav brand="Nexus Legacy Events" tabs={['Concerts', 'Festivals', 'Corporate']} active="Concerts" />
       <div className="space-y-2.5">
-        <FoodItem name="Indie Music Fest" desc="Sat, 14 Nov · Open air arena" price="From ₹599" />
-        <FoodItem name="Startup Founders Meetup" desc="Thu, 19 Nov · Tech park" price="Free" />
+        <FoodItem name="Global Tech Conclave 2026" desc="Hitex Arena" price="Passes Live" />
+        <FoodItem name="Sunburn Arena Live" desc="Stadium Live Acts" price="From ₹999" />
       </div>
     </div>,
     <div className={shell} key="registration">
-      <div className="eyebrow">Registration</div>
+      <div className="eyebrow">Enterprise Registration Gateway</div>
       <PaymentState />
     </div>,
-    <div className={shell} key="entry">
-      <div className="eyebrow">Entry scan</div>
-      <QRBlock label="Attendee #EV-11029" status="Verified · Gate B" />
-    </div>,
     <div className={shell} key="dashboard">
-      <MiniNav brand="Host dashboard" tabs={['Overview', 'Attendees', 'Analytics']} active="Analytics" />
+      <MiniNav brand="Organizer Command Center" tabs={['Scans', 'Delegates', 'Analytics']} active="Analytics" />
       <div className="grid grid-cols-3 gap-2.5">
-        <StatTile label="Registered" value="1,402" />
-        <StatTile label="Checked in" value="980" />
-        <StatTile label="Revenue" value="₹8.4L" />
+        <StatTile label="Delegates" value="3,400" />
+        <StatTile label="Gate Scans" value="2,980" />
+        <StatTile label="Revenue" value="₹34.2L" />
       </div>
-      <ChartBars values={[30, 48, 42, 60, 75, 68, 88]} />
+      <ChartBars values={[30, 48, 52, 68, 75, 82, 94]} />
     </div>,
   ],
 
   'anvayaa-productions': () => [
     <div className={shell} key="portfolio">
-      <MiniNav brand="Anvayaa" tabs={['Home', 'Portfolio', 'Services', 'Contact']} active="Portfolio" />
+      <MiniNav brand="Anvayaa Productions" tabs={['Weddings', 'Production', 'Celebrity Acts']} active="Weddings" />
       <div className="space-y-2.5">
-        <FoodItem name="Grand Palace Wedding" desc="Jaipur · Heritage luxury production" price="Dec 2026" />
-        <FoodItem name="Sunset Beach Vows" desc="Goa · Coastal floral design" price="Nov 2026" />
+        <FoodItem name="Heritage Palace Wedding" desc="Jaipur · 1,500 Guests · Royal Floral Decor" price="Completed" />
+        <FoodItem name="Lakeside Luxury Ceremony" desc="Udaipur · Drone Light Show · Custom Stage" price="In Production" />
       </div>
     </div>,
     <div className={shell} key="services">
-      <div className="eyebrow">Production Services</div>
+      <div className="eyebrow">Luxury Production Services</div>
       <div className="space-y-2.5">
-        <TicketTier name="Immersive Decor & Florals" price="Custom Theme" seats="Complete venue transformation" />
-        <TicketTier name="Elite Artist Management" price="Live Acts" seats="Coordination & stage design" />
+        <TicketTier name="Architectural Decor &amp; Stage Design" price="Custom" seats="End-to-end venue transformation" />
+        <TicketTier name="Artist &amp; Symphony Curation" price="Live Acts" seats="Exclusive talent management" />
       </div>
     </div>,
     <div className={shell} key="dashboard">
-      <MiniNav brand="Event Coordinator" tabs={['Schedules', 'Vendors', 'Metrics']} active="Metrics" />
+      <MiniNav brand="Production Coordinator HUD" tabs={['Vendors', 'Timeline', 'Budget']} active="Timeline" />
       <div className="grid grid-cols-3 gap-2.5">
-        <StatTile label="Guests RSVP" value="1,200" />
-        <StatTile label="Vendors Active" value="34" />
-        <StatTile label="Decor Progress" value="85%" />
+        <StatTile label="RSVP Count" value="1,450" />
+        <StatTile label="Active Crews" value="42" />
+        <StatTile label="Milestone" value="95%" />
       </div>
-      <ChartBars values={[20, 35, 50, 65, 75, 80, 85]} />
+      <ChartBars values={[25, 40, 55, 70, 80, 90, 95]} />
     </div>,
   ],
 };

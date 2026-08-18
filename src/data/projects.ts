@@ -12,14 +12,10 @@ export interface Project {
   flagship?: boolean;
 
   /**
-   * Where the project lives. Currently a placeholder — swap in the
-   * real URL when it's ready. Leaving it empty renders the showcase
-   * as non-clickable (no dead links). A value starting with "/" is
-   * treated as an internal route instead of opening a new tab.
+   * Where the project lives.
    */
   url?: string;
 
-  /** Real screenshot, once available. Falls back to the built mockup. */
   image?: string;
   images?: string[];
 
@@ -33,6 +29,30 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'solevault',
+    title: 'SoleVault E-Commerce',
+    flagship: true,
+    url: 'https://solevault-lsr4.onrender.com/',
+    category: 'Full-Stack E-Commerce & Logistics Platform',
+    meta: [
+      { label: 'Role', value: 'End-to-End Store & Logistics' },
+      { label: 'Stack', value: 'Storefront · Delhivery · Inventory · Payments' },
+      { label: 'Type', value: 'Live Production Platform' },
+    ],
+    flow: [
+      'Shopper',
+      'Catalog & Search',
+      'Cart & Wishlist',
+      'Checkout',
+      'Razorpay / Stripe',
+      'Delhivery Auto-Dispatch',
+      'Realtime Tracking',
+      'Inventory Auto-Sync',
+      'Admin Dashboard',
+    ],
+    technologies: ['React', 'Node.js', 'MongoDB', 'Delhivery API', 'Razorpay', 'Inventory Sync', 'Webhooks'],
+  },
+  {
     id: 'pro-nights',
     title: 'PRAMANA26 | GITAM',
     flagship: true,
@@ -40,7 +60,7 @@ export const projects: Project[] = [
     category: 'Event platform',
     meta: [
       { label: 'Role', value: 'End-to-end build' },
-      { label: 'Stack', value: 'Web \u00b7 Payments \u00b7 QR \u00b7 Dashboard' },
+      { label: 'Stack', value: 'Web · Payments · QR · Dashboard' },
       { label: 'Type', value: 'Flagship case study' },
     ],
     flow: [
@@ -60,45 +80,19 @@ export const projects: Project[] = [
   {
     id: 'restaurant',
     title: 'Restaurant Platform',
-    // TODO: replace with the live project URL.
     url: 'https://restaurant-gamma-kohl.vercel.app/',
     category: 'Website + admin system',
     meta: [
       { label: 'Role', value: 'Website + admin system' },
-      { label: 'Stack', value: 'QR menu \u00b7 Orders \u00b7 Dashboard' },
+      { label: 'Stack', value: 'QR menu · Orders · Dashboard' },
     ],
     flow: ['Customer', 'Live menu', 'Order', 'Admin', 'Restaurant dashboard'],
-    note: 'Scroll \u2192 the live menu becomes the admin panel that runs it',
+    note: 'Scroll → the live menu becomes the admin panel that runs it',
     technologies: ['React', 'Node.js', 'MongoDB'],
-  },
-  {
-    id: 'school',
-    title: 'School Website',
-    // TODO: replace with the live project URL.
-    url: 'https://education-beige-three.vercel.app/',
-    category: 'Website + CMS',
-    meta: [
-      { label: 'Role', value: 'Website + CMS' },
-      { label: 'Stack', value: 'Admissions \u00b7 Announcements \u00b7 Gallery' },
-    ],
-    technologies: ['Next.js', 'Sanity CMS'],
-  },
-  {
-    id: 'event-management',
-    title: 'Event Management Platform',
-    url: 'https://nexuslegacyevents.vercel.app/',
-    category: 'Discovery to analytics',
-    meta: [
-      { label: 'Role', value: 'Discovery to analytics' },
-      { label: 'Stack', value: 'Registration \u00b7 Payments \u00b7 QR \u00b7 Dashboard' },
-    ],
-    flow: ['Discovery', 'Registration', 'Payment', 'Ticket', 'Entry', 'Dashboard'],
-    technologies: ['React', 'Node.js', 'Stripe'],
   },
   {
     id: 'anvayaa-productions',
     title: 'Anvayaa Productions',
-    // TODO: replace with the live project URL.
     url: 'https://www.anvayaaproductions.in/',
     category: 'Event Production & Luxury Weddings',
     meta: [
@@ -108,16 +102,43 @@ export const projects: Project[] = [
     flow: ['Discovery', 'Services', 'Portfolio', 'Events', 'Contact'],
     technologies: ['React', 'Node.js', 'Responsive Design'],
   },
+  {
+    id: 'school',
+    title: 'School Website',
+    url: 'https://education-beige-three.vercel.app/',
+    category: 'Website + CMS',
+    meta: [
+      { label: 'Role', value: 'Website + CMS' },
+      { label: 'Stack', value: 'Admissions · Announcements · Gallery' },
+    ],
+    technologies: ['Next.js', 'Sanity CMS'],
+  },
+  {
+    id: 'event-management',
+    title: 'Nexus Legacy Events',
+    url: 'https://nexuslegacyevents.vercel.app/',
+    category: 'Discovery to analytics',
+    meta: [
+      { label: 'Role', value: 'Discovery to analytics' },
+      { label: 'Stack', value: 'Registration · Payments · QR · Dashboard' },
+    ],
+    flow: ['Discovery', 'Registration', 'Payment', 'Ticket', 'Entry', 'Dashboard'],
+    technologies: ['React', 'Node.js', 'Stripe'],
+  },
 ];
 
 export interface Client {
   name: string;
   tags: string[];
-  /** Client logo, once available (e.g. `/logos/nexus.svg`). Falls back to a monogram. */
   logo?: string;
 }
 
 export const clients: Client[] = [
+  {
+    name: 'SoleVault',
+    tags: ['E-Commerce'],
+    logo: '',
+  },
   {
     name: 'Pramana26',
     tags: [],
