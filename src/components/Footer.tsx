@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { siteConfig } from '../lib/siteConfig';
 
-export default function Footer() {
+interface FooterProps {
+  onNavigatePrivacy?: () => void;
+  onNavigateHome?: () => void;
+}
+
+export default function Footer({ onNavigatePrivacy, onNavigateHome }: FooterProps) {
   const { contact, founder } = siteConfig;
   const [time, setTime] = useState({ ist: '', utc: '' });
 
@@ -18,10 +23,24 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);
 
+  const handlePrivacyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onNavigatePrivacy) {
+      e.preventDefault();
+      onNavigatePrivacy();
+    }
+  };
+
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onNavigateHome) {
+      e.preventDefault();
+      onNavigateHome();
+    }
+  };
+
   return (
     <footer className="relative z-[1] border-t border-line bg-bg-1/80 px-6 py-14 md:px-16 backdrop-blur-xl">
       <div className="wrap">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] gap-10 pb-12 border-b border-line">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_0.9fr_0.9fr] gap-10 pb-12 border-b border-line">
           {/* Brand Col */}
           <div>
             <div className="flex items-center gap-3">
@@ -33,7 +52,7 @@ export default function Footer() {
               <div className="font-display text-xl font-bold text-ink">DOTFREELANCER</div>
             </div>
             <p className="mt-3 font-mono text-[0.74rem] leading-relaxed text-ink-dim max-w-[40ch]">
-              Architected by {founder}. Custom web applications, payments, AI pipelines &amp; business ERPs engineered with zero team fragmentation.
+              Architected by {founder}. Custom web applications, payments, AI pipelines, WhatsApp API automations &amp; business ERPs engineered with zero team fragmentation.
             </p>
 
             {/* Live Telemetry Clock */}
@@ -103,6 +122,28 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
+          {/* Legal & Compliance */}
+          <div>
+            <div className="eyebrow mb-4">Legal &amp; Trust</div>
+            <ul className="flex flex-col gap-3 font-mono text-[0.78rem]">
+              <li>
+                <a
+                  href="/privacy-policy"
+                  onClick={handlePrivacyClick}
+                  className="text-ink-dim hover:text-cyan transition-colors flex items-center gap-2"
+                >
+                  <span className="text-cyan">§</span>
+                  <span className="underline underline-offset-4 decoration-line-strong hover:decoration-cyan">Privacy Policy</span>
+                </a>
+              </li>
+              <li>
+                <div className="text-[0.7rem] text-ink-faint leading-relaxed pt-1">
+                  India DPDP Act 2023 &amp; WhatsApp Cloud API Compliant.
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Bottom Bar */}
@@ -111,7 +152,25 @@ export default function Footer() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>ALL SYSTEMS OPERATIONAL · HIGH-AVAILABILITY CLUSTER</span>
           </div>
-          <span>© {new Date().getFullYear()} DotFreelancer. Single-Architect Software Engineering.</span>
+          <div className="flex items-center gap-4">
+            <a
+              href="/privacy-policy"
+              onClick={handlePrivacyClick}
+              className="text-ink-dim hover:text-cyan transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <span>·</span>
+            <a
+              href="/"
+              onClick={handleHomeClick}
+              className="text-ink-dim hover:text-cyan transition-colors"
+            >
+              DotFreelancer.in
+            </a>
+            <span>·</span>
+            <span>© {new Date().getFullYear()} Sai Krishna Motaparthi</span>
+          </div>
         </div>
       </div>
     </footer>

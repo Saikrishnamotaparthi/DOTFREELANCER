@@ -8,7 +8,13 @@ const links: [string, string][] = [
   ['Founder', '#about'],
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  currentRoute?: 'home' | 'privacy';
+  onNavigateHome?: () => void;
+  onNavigateContact?: () => void;
+}
+
+export default function Navbar({ currentRoute = 'home', onNavigateHome, onNavigateContact }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -35,6 +41,41 @@ export default function Navbar() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (currentRoute === 'privacy' && onNavigateHome) {
+      e.preventDefault();
+      onNavigateHome();
+    }
+  };
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (currentRoute === 'privacy' && onNavigateHome) {
+      e.preventDefault();
+      onNavigateHome();
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+    setMenuOpen(false);
+  };
+
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (currentRoute === 'privacy') {
+      e.preventDefault();
+      if (onNavigateContact) {
+        onNavigateContact();
+      } else if (onNavigateHome) {
+        onNavigateHome();
+        setTimeout(() => {
+          const el = document.querySelector('#contact');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+    setMenuOpen(false);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-[500] px-4 py-3 sm:px-8 sm:py-4 transition-all duration-300 ${
@@ -50,7 +91,8 @@ export default function Navbar() {
       >
         {/* Logo */}
         <a
-          href="#hero"
+          href="/#hero"
+          onClick={handleLogoClick}
           data-cursor="hover"
           className="group flex items-center gap-2.5 font-display font-semibold text-[0.98rem] sm:text-[1.08rem] tracking-tight"
         >
@@ -73,25 +115,38 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-7" aria-label="Primary">
-          {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              data-cursor="hover"
-              className="group relative font-mono text-[0.76rem] uppercase tracking-wider text-ink-dim transition-colors hover:text-cyan"
+          {currentRoute === 'privacy' ? (
+            <button
+              type="button"
+              onClick={onNavigateHome}
+              className="group relative font-mono text-[0.76rem] uppercase tracking-wider text-cyan transition-colors cursor-pointer"
             >
-              {label}
-              <span className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-gradient-to-r from-cyan to-signal transition-all duration-300 group-hover:w-full shadow-[0_0_6px_#00f2fe]" />
-            </a>
-          ))}
+              ← Back to Main Platform
+              <span className="absolute -bottom-1 left-0 h-[1.5px] w-full bg-gradient-to-r from-cyan to-signal shadow-[0_0_6px_#00f2fe]" />
+            </button>
+          ) : (
+            links.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={(e) => handleLinkClick(e, href)}
+                data-cursor="hover"
+                className="group relative font-mono text-[0.76rem] uppercase tracking-wider text-ink-dim transition-colors hover:text-cyan"
+              >
+                {label}
+                <span className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-gradient-to-r from-cyan to-signal transition-all duration-300 group-hover:w-full shadow-[0_0_6px_#00f2fe]" />
+              </a>
+            ))
+          )}
         </nav>
 
         {/* Action Button & Mobile Toggle */}
         <div className="flex items-center gap-3">
           <a
-            href="#contact"
+            href="/#contact"
+            onClick={handleContactClick}
             data-cursor="project"
-            className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-cyan/40 bg-cyan/10 px-4.5 py-2 font-mono text-[0.75rem] uppercase tracking-wider text-cyan transition-all duration-300 hover:bg-cyan hover:text-bg-0 hover:shadow-[0_0_20px_rgba(0,242,254,0.4)]"
+            className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-cyan/40 bg-cyan/10 px-4.5 py-2 font-mono text-[0.75rem] uppercase tracking-wider text-cyan transition-all duration-300 hover:bg-cyan hover:text-bg-0 hover:shadow-[0_0_20px_rgba(0,242,254,0.4)] cursor-pointer"
           >
             <span>Start a Project</span>
             <span className="text-xs">→</span>
@@ -143,22 +198,36 @@ export default function Navbar() {
         </div>
 
         <nav className="flex flex-col gap-1 py-4" aria-label="Mobile">
-          {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-between py-3 font-display text-lg font-medium text-ink hover:text-cyan border-b border-line/40 transition-colors"
+          {currentRoute === 'privacy' ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                if (onNavigateHome) onNavigateHome();
+              }}
+              className="flex items-center justify-between py-3 font-display text-lg font-medium text-cyan hover:text-white border-b border-line/40 transition-colors text-left"
             >
-              <span>{label}</span>
-              <span className="font-mono text-xs text-ink-faint">0{links.findIndex(l => l[0] === label) + 1}</span>
-            </a>
-          ))}
+              <span>← Return to Home</span>
+              <span className="font-mono text-xs text-cyan">01</span>
+            </button>
+          ) : (
+            links.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={(e) => handleLinkClick(e, href)}
+                className="flex items-center justify-between py-3 font-display text-lg font-medium text-ink hover:text-cyan border-b border-line/40 transition-colors"
+              >
+                <span>{label}</span>
+                <span className="font-mono text-xs text-ink-faint">0{links.findIndex(l => l[0] === label) + 1}</span>
+              </a>
+            ))
+          )}
         </nav>
 
         <a
-          href="#contact"
-          onClick={() => setMenuOpen(false)}
+          href="/#contact"
+          onClick={handleContactClick}
           className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-cyan py-3.5 font-mono text-[0.82rem] font-semibold uppercase tracking-wider text-bg-0 shadow-[0_0_20px_rgba(0,242,254,0.35)]"
         >
           <span>Initiate Project Brief</span>

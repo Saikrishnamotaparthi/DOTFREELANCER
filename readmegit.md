@@ -1,3 +1,3 @@
 git add .
-git commit -m "UPDATE entry qr"
+git commit -m "UPDATE of privacy policy"
 git push

@@ -18,9 +18,23 @@ import About from './components/About';
 import Proof from './components/Proof';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import PrivacyPolicy from './components/PrivacyPolicy';
+
+type Route = 'home' | 'privacy';
+
+function getInitialRoute(): Route {
+  if (typeof window === 'undefined') return 'home';
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  if (path === '/privacy-policy' || path === '/privacy' || hash === '#privacy-policy' || hash === '#privacy') {
+    return 'privacy';
+  }
+  return 'home';
+}
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [route, setRoute] = useState<Route>(getInitialRoute);
+  const [loading, setLoading] = useState(() => getInitialRoute() === 'home');
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -30,15 +44,67 @@ export default function App() {
     }
   }, [reduced]);
 
+  // Synchronize route with browser history (back/forward buttons and hash navigation)
+  useEffect(() => {
+    const onLocationChange = () => {
+      const newRoute = getInitialRoute();
+      setRoute(newRoute);
+      if (newRoute === 'privacy') {
+        const hash = window.location.hash;
+        if (hash) {
+          setTimeout(() => {
+            const el = document.querySelector(hash);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', onLocationChange);
+    window.addEventListener('hashchange', onLocationChange);
+    return () => {
+      window.removeEventListener('popstate', onLocationChange);
+      window.removeEventListener('hashchange', onLocationChange);
+    };
+  }, []);
+
   useEffect(() => {
     initLenis();
-    // Give layout a moment to settle (fonts, images) before measuring.
     const t = setTimeout(() => ScrollTrigger.refresh(), 300);
     return () => {
       clearTimeout(t);
       destroyLenis();
     };
-  }, []);
+  }, [route]);
+
+  const navigateToPrivacy = () => {
+    setRoute('privacy');
+    if (window.location.pathname !== '/privacy-policy') {
+      window.history.pushState({}, '', '/privacy-policy');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToHome = () => {
+    setRoute('home');
+    if (window.location.pathname !== '/' && window.location.pathname !== '') {
+      window.history.pushState({}, '', '/');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => ScrollTrigger.refresh(), 200);
+  };
+
+  const navigateToContact = () => {
+    setRoute('home');
+    if (window.location.pathname !== '/' && window.location.pathname !== '') {
+      window.history.pushState({}, '', '/#contact');
+    }
+    setTimeout(() => {
+      const el = document.querySelector('#contact');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      ScrollTrigger.refresh();
+    }, 150);
+  };
 
   return (
     <>
@@ -54,23 +120,36 @@ export default function App() {
         Skip to content
       </a>
 
-      <Navbar />
+      <Navbar
+        currentRoute={route}
+        onNavigateHome={navigateToHome}
+        onNavigateContact={navigateToContact}
+      />
 
       <main id="main-content" className="relative z-[1]">
-        <Hero introReady={!loading} />
-        <IdentitySection />
-        <Ecosystem />
-        <ServiceList />
-        <ProcessTimeline />
-        <ProjectShowcase />
-        <TechSection />
-        <WhyDotFreelancer />
-        <About />
-        <Proof />
-        <Contact />
+        {route === 'privacy' ? (
+          <PrivacyPolicy onBackToHome={navigateToHome} />
+        ) : (
+          <>
+            <Hero introReady={!loading} />
+            <IdentitySection />
+            <Ecosystem />
+            <ServiceList />
+            <ProcessTimeline />
+            <ProjectShowcase />
+            <TechSection />
+            <WhyDotFreelancer />
+            <About />
+            <Proof />
+            <Contact onNavigatePrivacy={navigateToPrivacy} />
+          </>
+        )}
       </main>
 
-      <Footer />
+      <Footer
+        onNavigatePrivacy={navigateToPrivacy}
+        onNavigateHome={navigateToHome}
+      />
     </>
   );
 }

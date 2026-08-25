@@ -39,7 +39,11 @@ function referenceId() {
   return `DF-${Date.now().toString(36).toUpperCase()}`;
 }
 
-export default function Contact() {
+interface ContactProps {
+  onNavigatePrivacy?: () => void;
+}
+
+export default function Contact({ onNavigatePrivacy }: ContactProps) {
   const [payload, setPayload] = useState<ContactPayload>(emptyPayload);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
@@ -98,57 +102,49 @@ export default function Contact() {
             className="success-in mx-auto max-w-[620px] p-8 sm:p-14 border border-cyan/30 bg-bg-1/95 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(0,242,254,0.15)]"
           >
             <div className="relative mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-cyan/50 bg-cyan/10">
-              <span className="absolute inset-0 rounded-full border border-cyan/30 animate-ping" />
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M4 12.5L9.5 18L20 6"
-                  stroke="#00f2fe"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <span className="font-mono text-2xl text-cyan">✓</span>
             </div>
 
-            <div className="cyber-badge-emerald mb-3">● PROJECT BRIEF TRANSMITTED</div>
-            <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold text-ink">
-              Thank you, {payload.name.split(' ')[0]}.
-            </h2>
-            <p className="mx-auto mt-4 max-w-[44ch] text-ink-dim text-[0.96rem] leading-relaxed">
-              Your system specifications have been ingested. A confirmation receipt is dispatched to{' '}
-              <span className="text-cyan font-mono">{payload.email}</span>.
+            <div className="eyebrow mb-2">Specifications Transmitted</div>
+            <h3 className="font-display text-2xl font-bold sm:text-3xl text-ink">Project Logged Successfully</h3>
+            <p className="mt-3 text-[0.92rem] text-ink-dim max-w-[45ch] mx-auto">
+              Your inquiry has been encrypted and delivered directly to Sai Krishna. Reviewing your technical scope now.
             </p>
 
-            <div className="mx-auto mt-10 max-w-[460px] space-y-4 border-t border-line pt-8 text-left">
+            <div className="mt-8 rounded-xl border border-cyan/20 bg-bg-0/60 p-4 font-mono text-[0.8rem]">
+              <div className="text-ink-faint">TRANSMISSION REFERENCE</div>
+              <div className="mt-1 text-cyan font-bold tracking-wider">{refId}</div>
+            </div>
+
+            <div className="mx-auto mt-8 max-w-[460px] space-y-3 border-t border-line pt-6 text-left">
               {nextSteps.map((step) => (
-                <div key={step.num} className="flex gap-4">
+                <div key={step.num} className="flex gap-3">
                   <span className="font-mono text-xs text-cyan font-bold">{step.num} //</span>
-                  <span className="text-[0.88rem] leading-relaxed text-ink-dim">{step.text}</span>
+                  <span className="text-[0.84rem] leading-relaxed text-ink-dim">{step.text}</span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href="#hero"
-                className="inline-flex items-center gap-2.5 rounded-xl border border-line-strong px-6 py-3.5 font-mono text-[0.78rem] uppercase tracking-wider text-ink transition-all duration-300 hover:border-cyan hover:text-cyan"
-              >
-                Return to Top
-              </a>
-
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href={siteConfig.contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor="project"
-                className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan to-signal px-7 py-3.5 font-mono text-[0.78rem] font-semibold uppercase tracking-wider text-bg-0 shadow-[0_0_20px_rgba(0,242,254,0.4)] hover:scale-105 transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 px-6 py-3 font-mono text-[0.82rem] font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-all"
               >
-                Instant WhatsApp Chat →
+                <span>💬 Expedite on WhatsApp</span>
               </a>
-            </div>
-
-            <div className="mt-8 font-mono text-[0.64rem] tracking-wider text-ink-faint">
-              DOSSIER IDENTIFIER // {refId}
+              <button
+                type="button"
+                onClick={() => {
+                  setPayload(emptyPayload);
+                  setSelectedFeatures([]);
+                  setState('idle');
+                }}
+                className="w-full sm:w-auto rounded-xl border border-line bg-surface/50 px-6 py-3 font-mono text-[0.82rem] text-ink-dim hover:text-cyan transition-colors"
+              >
+                Submit Another Inquiry
+              </button>
             </div>
           </Glass>
         </div>
@@ -157,66 +153,60 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 md:py-36 relative overflow-hidden">
+    <section id="contact" className="relative py-28 md:py-36 overflow-hidden">
       <Glow />
-      <div className="wrap relative">
-        <div className="text-center pb-12">
-          <div className="eyebrow mb-4 flex justify-center">Engineering Intake</div>
-          <h2 className="font-display text-[clamp(2.4rem,7vw,5.2rem)] font-bold leading-[0.98]">
-            Let’s build your <br />
-            <span className="bg-gradient-to-r from-cyan to-signal bg-clip-text text-transparent">
-              complete digital system.
-            </span>
+      <div className="wrap relative z-10">
+        <div className="text-center max-w-[700px] mx-auto mb-16">
+          <div className="eyebrow mb-3">Direct Engagement</div>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-ink">
+            Start a Direct Project Brief
           </h2>
-          <p className="mx-auto mt-5 max-w-[48ch] text-[1.02rem] text-ink-dim leading-relaxed">
-            Specify your requirements below. I’ll evaluate your architecture and provide a turnkey deployment plan.
+          <p className="mt-4 text-base sm:text-lg text-ink-dim">
+            Zero account managers, zero sales fluff. Send your specifications directly to the engineer who will architect and build your software.
           </p>
         </div>
 
-        {/* Customer Interactive Feature Selector */}
-        <div className="mx-auto max-w-[820px] mb-8 rounded-2xl border border-cyan/20 bg-bg-1/80 backdrop-blur-2xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
-          <div className="font-mono text-[0.68rem] text-cyan uppercase tracking-widest mb-3">
-            INTERACTIVE SCOPE CONFIGURATOR // SELECT DESIRED MODULES
+        <div className="max-w-[820px] mx-auto mb-10">
+          <div className="text-xs font-mono uppercase tracking-wider text-ink-faint mb-3 text-center sm:text-left">
+            Select Core Architectural Capabilities:
           </div>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
             {featurePills.map((feature) => {
-              const isSelected = selectedFeatures.includes(feature);
+              const active = selectedFeatures.includes(feature);
               return (
                 <button
                   key={feature}
                   type="button"
                   onClick={() => toggleFeature(feature)}
-                  className={`px-3.5 py-2 rounded-xl font-mono text-[0.72rem] transition-all duration-300 flex items-center gap-2 ${
-                    isSelected
-                      ? 'border border-cyan bg-cyan/20 text-cyan shadow-[0_0_15px_rgba(0,242,254,0.25)] font-semibold'
-                      : 'border border-line bg-surface/50 text-ink-dim hover:border-line-strong hover:text-ink'
+                  className={`rounded-xl px-3.5 py-1.5 font-mono text-[0.72rem] transition-all duration-200 border cursor-pointer ${
+                    active
+                      ? 'border-cyan bg-cyan/15 text-cyan shadow-[0_0_15px_rgba(0,242,254,0.2)]'
+                      : 'border-line bg-surface/40 text-ink-dim hover:border-line-strong hover:text-ink'
                   }`}
                 >
-                  <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? 'bg-cyan' : 'bg-ink-faint'}`} />
-                  <span>{feature}</span>
+                  {active ? '✓ ' : '+ '}
+                  {feature}
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Form Container */}
-        <Glass variant="smoked" className="mx-auto max-w-[820px] p-6 sm:p-10 border border-line-strong bg-bg-1/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-          <form ref={formRef} onSubmit={handleSubmit} noValidate className="relative space-y-6">
-            {/* Honeypot */}
-            <div className="absolute -left-[9999px] opacity-0" aria-hidden="true">
-              <label>
-                Company website
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={payload.website}
-                  onChange={(e) => update('website', e.target.value)}
-                />
-              </label>
-            </div>
+        <Glass
+          variant="smoked"
+          className="mx-auto max-w-[820px] p-6 sm:p-12 border border-line bg-bg-1/90 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.8)]"
+        >
+          <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-6">
+            <input
+              type="text"
+              name="website"
+              value={payload.website}
+              onChange={(e) => update('website', e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              className="sr-only"
+              aria-hidden="true"
+            />
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <FieldWrap label="Your Name" required error={errors.name}>
@@ -228,25 +218,24 @@ export default function Contact() {
                   autoComplete="name"
                 />
               </FieldWrap>
-              <FieldWrap label="Email Address" required error={errors.email}>
+              <FieldWrap label="Work Email" required error={errors.email}>
                 <TextField
                   type="email"
                   value={payload.email}
                   onChange={(e) => update('email', e.target.value)}
                   error={errors.email}
-                  placeholder="you@company.com"
+                  placeholder="rahul@company.com"
                   autoComplete="email"
                 />
               </FieldWrap>
             </div>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FieldWrap label="Phone / WhatsApp Number" required error={errors.phone}>
+              <FieldWrap label="Phone / WhatsApp Number" hint="Optional">
                 <TextField
                   type="tel"
                   value={payload.phone}
                   onChange={(e) => update('phone', e.target.value)}
-                  error={errors.phone}
                   placeholder="+91 98765 43210"
                   autoComplete="tel"
                 />
@@ -318,14 +307,30 @@ export default function Contact() {
               type="submit"
               disabled={state === 'submitting'}
               data-cursor="project"
-              className="w-full rounded-xl bg-gradient-to-r from-cyan to-signal py-4 text-center font-mono text-[0.84rem] font-bold uppercase tracking-wider text-bg-0 shadow-[0_0_25px_rgba(0,242,254,0.4)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,242,254,0.6)] hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-gradient-to-r from-cyan to-signal py-4 text-center font-mono text-[0.84rem] font-bold uppercase tracking-wider text-bg-0 shadow-[0_0_25px_rgba(0,242,254,0.4)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,242,254,0.6)] hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             >
               {state === 'submitting' ? 'Transmitting Specifications…' : 'Submit Project Specifications →'}
             </button>
+
+            <p className="mt-3 text-center font-mono text-[0.7rem] text-ink-faint">
+              By submitting this form, you acknowledge our{' '}
+              <a
+                href="/privacy-policy"
+                onClick={(e) => {
+                  if (onNavigatePrivacy) {
+                    e.preventDefault();
+                    onNavigatePrivacy();
+                  }
+                }}
+                className="text-cyan underline decoration-cyan/40 underline-offset-2 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </a>{' '}
+              &amp; consent to direct communication.
+            </p>
           </form>
         </Glass>
 
-        {/* WhatsApp Direct Option */}
         <div className="mx-auto mt-10 max-w-[820px] text-center">
           <p className="text-[0.9rem] text-ink-faint">
             Need an immediate discussion?{' '}
