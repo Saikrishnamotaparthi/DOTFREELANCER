@@ -19,13 +19,26 @@ import Proof from './components/Proof';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import DataDeletion from './components/DataDeletion';
 
-type Route = 'home' | 'privacy';
+type Route = 'home' | 'privacy' | 'data-deletion';
 
 function getInitialRoute(): Route {
   if (typeof window === 'undefined') return 'home';
   const path = window.location.pathname.toLowerCase();
   const hash = window.location.hash.toLowerCase();
+  if (
+    path === '/data-deletion' ||
+    path === '/data-deletion-request' ||
+    path === '/data-deletion-instructions' ||
+    path === '/deletion' ||
+    hash === '#data-deletion' ||
+    hash === '#data-deletion-request' ||
+    hash === '#data-deletion-instructions' ||
+    hash === '#deletion'
+  ) {
+    return 'data-deletion';
+  }
   if (path === '/privacy-policy' || path === '/privacy' || hash === '#privacy-policy' || hash === '#privacy') {
     return 'privacy';
   }
@@ -49,7 +62,7 @@ export default function App() {
     const onLocationChange = () => {
       const newRoute = getInitialRoute();
       setRoute(newRoute);
-      if (newRoute === 'privacy') {
+      if (newRoute === 'privacy' || newRoute === 'data-deletion') {
         const hash = window.location.hash;
         if (hash) {
           setTimeout(() => {
@@ -129,6 +142,8 @@ export default function App() {
       <main id="main-content" className="relative z-[1]">
         {route === 'privacy' ? (
           <PrivacyPolicy onBackToHome={navigateToHome} />
+        ) : route === 'data-deletion' ? (
+          <DataDeletion onBackToHome={navigateToHome} />
         ) : (
           <>
             <Hero introReady={!loading} />

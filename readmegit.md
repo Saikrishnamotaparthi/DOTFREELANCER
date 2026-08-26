@@ -1,3 +1,3 @@
 git add .
-git commit -m "UPDATE of privacy policy"
+git commit -m "UPDATE of DataDeletion page"
 git push

@@ -9,7 +9,7 @@ const links: [string, string][] = [
 ];
 
 interface NavbarProps {
-  currentRoute?: 'home' | 'privacy';
+  currentRoute?: 'home' | 'privacy' | 'data-deletion';
   onNavigateHome?: () => void;
   onNavigateContact?: () => void;
 }
@@ -42,14 +42,14 @@ export default function Navbar({ currentRoute = 'home', onNavigateHome, onNaviga
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (currentRoute === 'privacy' && onNavigateHome) {
+    if (currentRoute !== 'home' && onNavigateHome) {
       e.preventDefault();
       onNavigateHome();
     }
   };
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (currentRoute === 'privacy' && onNavigateHome) {
+    if (currentRoute !== 'home' && onNavigateHome) {
       e.preventDefault();
       onNavigateHome();
       setTimeout(() => {
@@ -61,7 +61,7 @@ export default function Navbar({ currentRoute = 'home', onNavigateHome, onNaviga
   };
 
   const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (currentRoute === 'privacy') {
+    if (currentRoute !== 'home') {
       e.preventDefault();
       if (onNavigateContact) {
         onNavigateContact();
