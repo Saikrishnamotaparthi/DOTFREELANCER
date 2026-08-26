@@ -20,13 +20,15 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import DataDeletion from './components/DataDeletion';
+import NotFound from './components/NotFound';
 
-type Route = 'home' | 'privacy' | 'data-deletion';
+type Route = 'home' | 'privacy' | 'data-deletion' | 'not-found';
 
 function getInitialRoute(): Route {
   if (typeof window === 'undefined') return 'home';
-  const path = window.location.pathname.toLowerCase();
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
   const hash = window.location.hash.toLowerCase();
+
   if (
     path === '/data-deletion' ||
     path === '/data-deletion-request' ||
@@ -39,10 +41,16 @@ function getInitialRoute(): Route {
   ) {
     return 'data-deletion';
   }
+
   if (path === '/privacy-policy' || path === '/privacy' || hash === '#privacy-policy' || hash === '#privacy') {
     return 'privacy';
   }
-  return 'home';
+
+  if (path === '/' || path === '' || path === '/index.html') {
+    return 'home';
+  }
+
+  return 'not-found';
 }
 
 export default function App() {
@@ -62,7 +70,7 @@ export default function App() {
     const onLocationChange = () => {
       const newRoute = getInitialRoute();
       setRoute(newRoute);
-      if (newRoute === 'privacy' || newRoute === 'data-deletion') {
+      if (newRoute === 'privacy' || newRoute === 'data-deletion' || newRoute === 'not-found') {
         const hash = window.location.hash;
         if (hash) {
           setTimeout(() => {
@@ -144,6 +152,8 @@ export default function App() {
           <PrivacyPolicy onBackToHome={navigateToHome} />
         ) : route === 'data-deletion' ? (
           <DataDeletion onBackToHome={navigateToHome} />
+        ) : route === 'not-found' ? (
+          <NotFound onBackToHome={navigateToHome} onNavigateContact={navigateToContact} />
         ) : (
           <>
             <Hero introReady={!loading} />

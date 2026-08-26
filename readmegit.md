@@ -1,3 +1,3 @@
 git add .
-git commit -m "UPDATE of DataDeletion page"
+git commit -m "ADD 404 Not Found page with HUD telemetry and teleport matrix"
 git push

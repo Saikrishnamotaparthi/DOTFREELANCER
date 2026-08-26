@@ -9,7 +9,7 @@ const links: [string, string][] = [
 ];
 
 interface NavbarProps {
-  currentRoute?: 'home' | 'privacy' | 'data-deletion';
+  currentRoute?: 'home' | 'privacy' | 'data-deletion' | 'not-found';
   onNavigateHome?: () => void;
   onNavigateContact?: () => void;
 }
